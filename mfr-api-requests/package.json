@@ -1,0 +1,10 @@
+{
+    "name": "mfr-api-requests",
+    "version": "1.0.0",
+    "private": true,
+    "dependencies": {
+        "express": "4.16.3",
+        "node-rest-client": "^3.1.0",
+        "nodejs-base64-encode": "0.0.2"
+    }
+}
