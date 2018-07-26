@@ -1,16 +1,13 @@
 (function() {
-  var app, express, collections, collection, server, username, password;
-  var tobeencoded, encoded, url;
-  const encode = require('nodejs-base64-encode');
+  var app, express, collections, collection, server;
+  var encoded;
+  
+  var util = require('./util.js');
   var Client = require('node-rest-client').Client;
 
   express = require("express");
 
-  url = "https://resourcemap.eth.instedd.org/api/";
-  username = "fekaduw@gmail.com";
-  password = "12345678";
-  tobeencoded = username + ':' + password;
-  encoded = encode.encode(tobeencoded, 'base64');
+  encoded = util.doencode();
   
   var client = new Client();
  
@@ -22,23 +19,39 @@
   };
 
   // registering remote methods
-  client.registerMethod("collectionMethod", url + "collections.json", "GET");
+  client.registerMethod("collectionMethod", util.url + "collections.json", "GET");
 
   collections = function(req, res, next) {
-    console.log("Received collection request ");
+    console.log("Received collections request ");
     client.methods.collectionMethod(args, function (data, response) {
-      //console.log(data); 
       res.send(data);
     });
     
   };
 
+  siteslist = function(req, res, next) {
+    var id = req.params.id;
+    console.log("Received sites list in a collection request ");
+    client.get(util.url + "collections/" + id + ".json", args, function (data, response) {
+      res.send(data);
+    });
+  };
  
+  specificsite = function(req, res, next) {
+    var id = req.params.id;
+    console.log("Received site request ");
+    client.get(util.url + "sites/" + id + ".json", args, function (data, response) {
+      res.send(data);
+    });
+  };
+
   app = express();
 
   app.use(express.json());
 
   app.get("/collections/", collections);
+  app.get("/collections/:id", siteslist);
+  app.get("/sites/:id", specificsite);
 
   server = app.listen(process.env.PORT || 2445, function() {
     return console.log("client-service running on port " + (server.address().port));
