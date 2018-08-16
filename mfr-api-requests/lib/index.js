@@ -85,7 +85,11 @@ function setupApp () {
     var organisationUnit = {"name":sites.name, 
                             "openingDate": sites.properties.year_opened ? sites.properties.year_opened : '1980-01-01',
                             "shortName": sites.properties.specific_area_name, 
-                            "id": sites.properties.Admin_health_hierarchy};
+                            "id": sites.properties.Admin_health_hierarchy,
+                            "parent":{
+                              "id":"cawmPT9A1Gg"
+                            }
+                          };
                             
     console.log(mediatorConfig.config.DHIS2baseurl + organisationUnit_req);
     console.log(JSON.stringify(organisationUnit));
@@ -109,12 +113,12 @@ function setupApp () {
     .then(response => response.json())
     .then(function handleData(data) {
       return_data = data;
-      });
+    });
 
 
 
     responseBody = JSON.stringify(return_data);
-    
+    console.log(responseBody);
    
     orchestrations.push(utils.buildOrchestration('Register in DHIS2', new Date().getTime(), req.method, req.url, 
                         req.headers, req.body, orchestrationResponse, responseBody))
