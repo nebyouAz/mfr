@@ -1,0 +1,36 @@
+[
+    {
+        "anonymous_location_permission": "none",
+        "anonymous_name_permission": "none",
+        "created_at": "2018-05-31T08:19:39.000Z",
+        "description": "Development Collection for testing",
+        "icon": "default",
+        "id": 6,
+        "lat": "0.0",
+        "lng": "0.0",
+        "max_lat": "-90.0",
+        "max_lng": "-180.0",
+        "min_lat": "90.0",
+        "min_lng": "180.0",
+        "name": "DevelopmentCollection",
+        "updated_at": "2018-05-31T08:24:11.000Z",
+        "count": 4
+    },
+    {
+        "anonymous_location_permission": "none",
+        "anonymous_name_permission": "none",
+        "created_at": "2018-03-07T21:08:53.000Z",
+        "description": "",
+        "icon": "default",
+        "id": 3,
+        "lat": "9.03195",
+        "lng": "38.12229",
+        "max_lat": "14.51946",
+        "max_lng": "42.88682",
+        "min_lat": "3.54444",
+        "min_lng": "33.35776",
+        "name": "Ethiopia Health Facility Registry",
+        "updated_at": "2018-03-07T21:45:55.000Z",
+        "count": 17576
+    }
+]

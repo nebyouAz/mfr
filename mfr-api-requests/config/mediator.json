@@ -1,0 +1,78 @@
+{
+    "urn": "urn",
+    "version": "0.0.11",
+    "name": "MFR",
+    "description": "Fetch facility records from MFR",
+    "defaultChannelConfig": [
+      {
+        "name": "MFR",
+        "urlPattern": "/fetch",
+        "alerts": [],
+        "txRerunAcl": [],
+        "txViewFullAcl": [],
+        "txViewAcl": [],
+        "properties": [],
+        "matchContentTypes": [],
+        "routes": [
+          {
+            "name": "fetch Route",
+            "host": "localhost",
+            "port": "3000",
+            "primary": true,
+            "type": "http"
+          }
+        ],
+        "allow": [
+          "admin"
+        ],
+        "type": "http"
+      }
+    ],
+    "endpoints": [
+      {
+        "name": "fetch Route",
+        "host": "localhost",
+        "path": "/",
+        "port": "3001",
+        "primary": true,
+        "type": "http"
+      }
+    ],
+    "configDefs": [
+      {
+        "param": "baseurl",
+        "displayName": "Upstream URL",
+        "description": "The URL of the service upstream of the mediator",
+        "type": "string",
+        "template": []
+      },
+      {
+        "param": "collectionname",
+        "displayName": "Collection Name",
+        "description": "The name of the required MFR collection",
+        "type": "string",
+        "template": []
+      },
+      {
+        "param": "siteidtosync",
+        "displayName": "Site ID to Sync",
+        "description": "MFR Site ID to be synced to DHIS2",
+        "type": "string",
+        "template": []
+      },
+      {
+        "param": "DHIS2baseurl",
+        "displayName": "DHIS2 Upstream URL",
+        "description": "The URL of the DHIS2 service upstream of the mediator",
+        "type": "string",
+        "template": []
+      }
+
+    ],
+    "config": {
+      "baseurl": "https://resourcemap.eth.instedd.org",
+      "collectionname": "Ethiopia Health Facility Registry",
+      "siteidtosync": "30",
+      "DHIS2baseurl": "http://localhost:8081"
+    }
+  }

@@ -1,0 +1,1620 @@
+{
+    "name": "Ethiopia Health Facility Registry",
+    "nextPage": "https://resourcemap.eth.instedd.org/api/collections/3.json?locale=en&page=2",
+    "count": 17576,
+    "totalPages": 352,
+    "sites": [
+        {
+            "id": 2,
+            "name": "01 Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "lat": 11.91927,
+            "long": 38.0215,
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.42441300",
+                "year_opened": 2008,
+                "specific_area_name": "Talda",
+                "facility_type": "Health_Center",
+                "facility_type-1": "Health Center",
+                "24hour_service": "yes",
+                "sterilized_loc": "sterlized_onsite",
+                "medwaste_disposal": "openburn_flat",
+                "general_services": [
+                    "Child_Vaccination",
+                    "GMP",
+                    "Curative_services",
+                    "FP",
+                    "ANC_Services",
+                    "PMTCT_Services",
+                    "Delivery_Normal",
+                    "Malaria_DT",
+                    "STI_DT",
+                    "TB_DT",
+                    "HIV_TC",
+                    "HIV_ART",
+                    "HIV_CS",
+                    "NCD_Diag_Mngt",
+                    "Surgical_Minor",
+                    "Lab_Dx",
+                    "Blood_Typing",
+                    "Ped_Emrg_Serv",
+                    "Emergency_Services"
+                ],
+                "sharps_disposal": "openburn_flat",
+                "hiv_testing_onsite": [
+                    "hiv_testing_onsite",
+                    "hiv_rdt"
+                ],
+                "clinical_chemistry": [
+                    "liver_function",
+                    "urine_protein",
+                    "urine_glucose",
+                    "urine_pregnancy"
+                ],
+                "parasitology_services": [
+                    "malaria_test",
+                    "malaria_rdt",
+                    "stool_microscopy"
+                ],
+                "tb_testing": [
+                    "tb_test"
+                ],
+                "numb_ambulances_onsite": 0,
+                "operational_status": "fully_functional",
+                "beds": 3,
+                "water_supply": "not_severe_shortages",
+                "hmis_implementation": "paperbased",
+                "protected_waiting_for_pregnant_woman": "yes",
+                "water_source_type": [
+                    "protected_well_water"
+                ],
+                "freezer": false,
+                "microscope": "yes",
+                "incubator": "no",
+                "centrifuge": "no",
+                "ethiopian_national_identifier": "101146-9",
+                "spaplus_fac_code": "30636",
+                "hmis_code": "302040023",
+                "altitude_m": 2384,
+                "ahunode": "30204",
+                "sterlization_equipment": "pot_nonelectric, drums",
+                "refridgerator": "no"
+            }
+        },
+        {
+            "id": 3,
+            "name": "01 Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.49530779",
+                "specific_area_name": "M0Tta",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "109086-9",
+                "hmis_code": "3061800300",
+                "ahunode": "30618"
+            }
+        },
+        {
+            "id": 4,
+            "name": "01 Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.93482189",
+                "Settlement": "urban",
+                "specific_area_name": "Shakiso",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "116078-7",
+                "hmis_code": "No HMIS Code",
+                "ahunode": "41490"
+            }
+        },
+        {
+            "id": 5,
+            "name": "01 Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "specific_area_name": "01 Kebele",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "117256-8",
+                "hmis_code": "502040037",
+                "ahunode": "No HMIS Code"
+            }
+        },
+        {
+            "id": 6,
+            "name": "01 Kebe Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.14132519",
+                "specific_area_name": "01 Kebele",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "104431-2",
+                "hmis_code": "No HMIS code",
+                "ahunode": "50302"
+            }
+        },
+        {
+            "id": 7,
+            "name": "01 Kebele",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Settlement": "urban",
+                "specific_area_name": "01 Kebele",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "117100-8",
+                "hmis_code": "1205000301",
+                "ahunode": "#REF!"
+            }
+        },
+        {
+            "id": 8,
+            "name": "01 Kebele Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "lat": 11.41405,
+            "long": 38.42853,
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.10957333",
+                "year_opened": 2010,
+                "specific_area_name": "Robit",
+                "facility_type": "Health_Center",
+                "facility_type-1": "Health Center",
+                "24hour_service": "yes",
+                "sterilized_loc": "sterlized_onsite",
+                "medwaste_disposal": "incinerator_1chamber",
+                "general_services": [
+                    "Child_Vaccination",
+                    "GMP",
+                    "Curative_services",
+                    "FP",
+                    "ANC_Services",
+                    "PMTCT_Services",
+                    "Delivery_Normal",
+                    "Malaria_DT",
+                    "STI_DT",
+                    "TB_DT",
+                    "HIV_TC",
+                    "NCD_Diag_Mngt",
+                    "Surgical_Minor",
+                    "Lab_Dx",
+                    "Blood_Typing",
+                    "Ped_Emrg_Serv",
+                    "Emergency_Services"
+                ],
+                "sharps_disposal": "incinerator_1chamber",
+                "hiv_testing_onsite": [
+                    "hiv_testing_onsite",
+                    "hiv_rdt"
+                ],
+                "clinical_chemistry": [
+                    "liver_function",
+                    "urine_pregnancy"
+                ],
+                "parasitology_services": [
+                    "malaria_test",
+                    "malaria_rdt",
+                    "stool_microscopy"
+                ],
+                "tb_testing": [
+                    "tb_test"
+                ],
+                "numb_ambulances_onsite": 0,
+                "operational_status": "fully_functional",
+                "beds": 2,
+                "water_supply": "not_severe_shortages",
+                "hmis_implementation": "paperbased",
+                "protected_waiting_for_pregnant_woman": "yes",
+                "water_source_type": [
+                    "tap_water"
+                ],
+                "freezer": false,
+                "microscope": "yes",
+                "incubator": "no",
+                "centrifuge": "yes",
+                "ethiopian_national_identifier": "101688-0",
+                "spaplus_fac_code": "30624",
+                "hmis_code": "302070030",
+                "altitude_m": 2544,
+                "ahunode": "302",
+                "sterlization_equipment": "autoclave_nonelect, stove_cooker, timer, tst_indicator_strips, chemical_hld, drums",
+                "refridgerator": "yes"
+            }
+        },
+        {
+            "id": 9,
+            "name": "01 Kebele Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.18838097",
+                "specific_area_name": "Mariam Minch(Sefer 1)",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "105072-3",
+                "ahunode": "30604"
+            }
+        },
+        {
+            "id": 10,
+            "name": "01 Kebele Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.79314168",
+                "Settlement": "agrarian",
+                "specific_area_name": "Goba",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "114182-9",
+                "hmis_code": "No HMIS Code",
+                "ahunode": "41120"
+            }
+        },
+        {
+            "id": 11,
+            "name": "01 Kebele Urban Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.66223155",
+                "specific_area_name": "Abayater",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "112061-7",
+                "hmis_code": "3051200310",
+                "ahunode": "30512"
+            }
+        },
+        {
+            "id": 12,
+            "name": "01 Kebele Urban Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.73552155",
+                "specific_area_name": "Zuna",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "113205-9",
+                "hmis_code": "3080200308",
+                "ahunode": "30802"
+            }
+        },
+        {
+            "id": 13,
+            "name": "01 Kebeleurban Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.51373738",
+                "Settlement": "urban",
+                "specific_area_name": "Ambo",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "109307-9",
+                "hmis_code": "No HMIS Code",
+                "ahunode": "40515"
+            }
+        },
+        {
+            "id": 14,
+            "name": "01 Post A Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.10441660",
+                "Settlement": "urban",
+                "specific_area_name": "Metu",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "103195-4",
+                "hmis_code": "4032000300",
+                "ahunode": "40320"
+            }
+        },
+        {
+            "id": 15,
+            "name": "01 Post B Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.10441660",
+                "Settlement": "urban",
+                "specific_area_name": "Metu",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "103196-2",
+                "hmis_code": "No HMIS Code",
+                "ahunode": "40320"
+            }
+        },
+        {
+            "id": 16,
+            "name": "01Kebele Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "lat": 11.28263,
+            "long": 38.51196,
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.10957333",
+                "year_opened": 2008,
+                "specific_area_name": "Nibazela",
+                "facility_type": "Health_Center",
+                "facility_type-1": "Health Center",
+                "24hour_service": "yes",
+                "sterilized_loc": "sterlized_onsite",
+                "medwaste_disposal": "openburn_pit",
+                "general_services": [
+                    "Child_Vaccination",
+                    "GMP",
+                    "Curative_services",
+                    "FP",
+                    "ANC_Services",
+                    "PMTCT_Services",
+                    "Delivery_Normal",
+                    "Malaria_DT",
+                    "STI_DT",
+                    "TB_DT",
+                    "HIV_TC",
+                    "HIV_ART",
+                    "NCD_Diag_Mngt",
+                    "Surgical_Minor",
+                    "Lab_Dx",
+                    "Blood_Typing",
+                    "Ped_Emrg_Serv",
+                    "Emergency_Services"
+                ],
+                "sharps_disposal": "incinerator_1chamber",
+                "hematology_services": [
+                    "hemoglobin"
+                ],
+                "hiv_testing_onsite": [
+                    "hiv_testing_onsite",
+                    "hiv_rdt"
+                ],
+                "clinical_chemistry": [
+                    "liver_function",
+                    "urine_protein",
+                    "urine_glucose",
+                    "urine_pregnancy"
+                ],
+                "parasitology_services": [
+                    "malaria_test",
+                    "stool_microscopy"
+                ],
+                "tb_testing": [
+                    "tb_test"
+                ],
+                "numb_ambulances_onsite": 1,
+                "operational_status": "fully_functional",
+                "communications": [
+                    "computer"
+                ],
+                "water_supply": "severe_shortages",
+                "source_power": [
+                    "grid"
+                ],
+                "hmis_implementation": "paperbased",
+                "protected_waiting_for_pregnant_woman": "yes",
+                "water_source_type": [
+                    "tap_water"
+                ],
+                "freezer": false,
+                "microscope": "yes",
+                "incubator": "no",
+                "centrifuge": "yes",
+                "ethiopian_national_identifier": "101687-2",
+                "spaplus_fac_code": "30625",
+                "hmis_code": "302070027",
+                "altitude_m": 1901,
+                "ahunode": "302",
+                "sterlization_equipment": "pot_nonelectric, stove_cooker, timer, drums, cabinets",
+                "refridgerator": "no"
+            }
+        },
+        {
+            "id": 17,
+            "name": "01Kebele Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.87992011",
+                "specific_area_name": "Dejen 01Kebele",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "115116-6",
+                "ahunode": "30613"
+            }
+        },
+        {
+            "id": 18,
+            "name": "02 Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "lat": 11.54789,
+            "long": 38.32088,
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.10957333",
+                "year_opened": 2014,
+                "specific_area_name": "Sedie",
+                "facility_type": "Health_Center",
+                "facility_type-1": "Health Center",
+                "24hour_service": "no",
+                "sterilized_loc": "sterlized_onsite",
+                "medwaste_disposal": "openburn_flat",
+                "general_services": [
+                    "Child_Vaccination",
+                    "GMP",
+                    "Curative_services",
+                    "FP",
+                    "ANC_Services",
+                    "PMTCT_Services",
+                    "Delivery_Normal",
+                    "Malaria_DT",
+                    "STI_DT",
+                    "TB_DT",
+                    "HIV_TC",
+                    "NCD_Diag_Mngt",
+                    "Surgical_Minor",
+                    "Ped_Emrg_Serv",
+                    "Emergency_Services"
+                ],
+                "sharps_disposal": "openburn_flat",
+                "numb_ambulances_onsite": 0,
+                "operational_status": "fully_functional",
+                "water_supply": "severe_shortages",
+                "hmis_implementation": "paperbased",
+                "protected_waiting_for_pregnant_woman": "no",
+                "water_source_type": [
+                    "rain_water"
+                ],
+                "freezer": false,
+                "ethiopian_national_identifier": "101383-8",
+                "spaplus_fac_code": "30626",
+                "hmis_code": "302070030",
+                "altitude_m": 2742,
+                "ahunode": "302",
+                "sterlization_equipment": "pot_nonelectric, stove_cooker, drums"
+            }
+        },
+        {
+            "id": 19,
+            "name": "02 Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.14132519",
+                "specific_area_name": "02 Kebele",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "104430-4",
+                "hmis_code": "No HMIS code",
+                "ahunode": "50302"
+            }
+        },
+        {
+            "id": 20,
+            "name": "02 Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.49530779",
+                "specific_area_name": "M0Tta",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "109083-6",
+                "hmis_code": "3061800301",
+                "ahunode": "30618"
+            }
+        },
+        {
+            "id": 21,
+            "name": "02 Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.93482189",
+                "Settlement": "urban",
+                "specific_area_name": "Shakiso",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "116079-5",
+                "hmis_code": "No HMIS Code",
+                "ahunode": "41490"
+            }
+        },
+        {
+            "id": 22,
+            "name": "02 Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "specific_area_name": "02 Kebele",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "117259-2",
+                "hmis_code": "502040063",
+                "ahunode": "No HMIS Code"
+            }
+        },
+        {
+            "id": 23,
+            "name": "02 kebele",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Settlement": "urban",
+                "specific_area_name": "02 kebele",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "117101-6",
+                "hmis_code": "1205000302",
+                "ahunode": "#REF!"
+            }
+        },
+        {
+            "id": 24,
+            "name": "02 Kebele Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "lat": 11.23201,
+            "long": 38.2327,
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.60018115",
+                "year_opened": 2007,
+                "specific_area_name": "Zebo",
+                "facility_type": "Health_Center",
+                "facility_type-1": "Health Center",
+                "24hour_service": "yes",
+                "sterilized_loc": "sterlized_onsite",
+                "medwaste_disposal": "dump_noburn_flat",
+                "general_services": [
+                    "Child_Vaccination",
+                    "GMP",
+                    "Curative_services",
+                    "FP",
+                    "ANC_Services",
+                    "PMTCT_Services",
+                    "Delivery_Normal",
+                    "Malaria_DT",
+                    "STI_DT",
+                    "TB_DT",
+                    "HIV_TC",
+                    "HIV_ART",
+                    "NCD_Diag_Mngt",
+                    "Surgical_Minor",
+                    "Lab_Dx",
+                    "Blood_Typing",
+                    "Ped_Emrg_Serv",
+                    "Emergency_Services"
+                ],
+                "sharps_disposal": "dump_noburn_flat",
+                "hiv_testing_onsite": [
+                    "hiv_testing_onsite",
+                    "hiv_rdt"
+                ],
+                "clinical_chemistry": [
+                    "liver_function",
+                    "urine_protein",
+                    "urine_glucose",
+                    "urine_pregnancy"
+                ],
+                "parasitology_services": [
+                    "malaria_test",
+                    "malaria_rdt",
+                    "stool_microscopy"
+                ],
+                "tb_testing": [
+                    "tb_test"
+                ],
+                "operational_status": "fully_functional",
+                "communications": [
+                    "computer"
+                ],
+                "water_supply": "severe_shortages",
+                "source_power": [
+                    "grid"
+                ],
+                "hmis_implementation": "both_paper_electronic",
+                "protected_waiting_for_pregnant_woman": "yes",
+                "water_source_type": [
+                    "protected_well_water"
+                ],
+                "freezer": false,
+                "microscope": "yes",
+                "incubator": "no",
+                "centrifuge": "yes",
+                "ethiopian_national_identifier": "100083-5",
+                "spaplus_fac_code": "30627",
+                "hmis_code": "30207002",
+                "altitude_m": 2411,
+                "ahunode": "30207",
+                "sterlization_equipment": "autoclave_elect, autoclave_nonelect, stove_cooker, drums",
+                "refridgerator": "no"
+            }
+        },
+        {
+            "id": 25,
+            "name": "02 Kebele Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.18838097",
+                "specific_area_name": "Mariam Minch(Sefer 1)",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "105073-1",
+                "ahunode": "30604"
+            }
+        },
+        {
+            "id": 26,
+            "name": "02 Kebele Urban Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.51373738",
+                "Settlement": "urban",
+                "specific_area_name": "Awaro",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "109310-3",
+                "hmis_code": "No HMIS Code",
+                "ahunode": "40515"
+            }
+        },
+        {
+            "id": 27,
+            "name": "02 Kebele Urban Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.51538695",
+                "specific_area_name": "Bati",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "109352-5",
+                "ahunode": "31002"
+            }
+        },
+        {
+            "id": 28,
+            "name": "02 Kebele Urban Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.75476513",
+                "specific_area_name": "Genager",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "113509-4",
+                "hmis_code": "3051400301",
+                "ahunode": "30514"
+            }
+        },
+        {
+            "id": 29,
+            "name": "02 Ketema Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "lat": 11.42741,
+            "long": 38.1488,
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.60018115",
+                "year_opened": 2009,
+                "specific_area_name": "Ankar Feji",
+                "facility_type": "Health_Center",
+                "facility_type-1": "Health Center",
+                "24hour_service": "yes",
+                "sterilized_loc": "sterlized_onsite",
+                "medwaste_disposal": "incinerator_1chamber",
+                "general_services": [
+                    "Child_Vaccination",
+                    "GMP",
+                    "Curative_services",
+                    "FP",
+                    "ANC_Services",
+                    "PMTCT_Services",
+                    "Delivery_Normal",
+                    "Malaria_DT",
+                    "STI_DT",
+                    "TB_DT",
+                    "HIV_TC",
+                    "NCD_Diag_Mngt",
+                    "Surgical_Minor",
+                    "Lab_Dx",
+                    "Blood_Typing",
+                    "Ped_Emrg_Serv",
+                    "Emergency_Services"
+                ],
+                "sharps_disposal": "incinerator_1chamber",
+                "hiv_testing_onsite": [
+                    "hiv_testing_onsite",
+                    "hiv_rdt"
+                ],
+                "clinical_chemistry": [
+                    "liver_function",
+                    "urine_protein",
+                    "urine_glucose",
+                    "urine_pregnancy"
+                ],
+                "parasitology_services": [
+                    "malaria_test",
+                    "malaria_rdt",
+                    "stool_microscopy"
+                ],
+                "tb_testing": [
+                    "tb_test"
+                ],
+                "numb_ambulances_onsite": 0,
+                "operational_status": "fully_functional",
+                "beds": 2,
+                "water_supply": "severe_shortages",
+                "hmis_implementation": "paperbased",
+                "protected_waiting_for_pregnant_woman": "yes",
+                "water_source_type": [
+                    "tap_water"
+                ],
+                "freezer": false,
+                "microscope": "yes",
+                "incubator": "no",
+                "centrifuge": "yes",
+                "ethiopian_national_identifier": "101867-0",
+                "spaplus_fac_code": "30628",
+                "hmis_code": "302070022",
+                "altitude_m": 2502,
+                "ahunode": "30207",
+                "sterlization_equipment": "autoclave_nonelect, stove_cooker, timer, tst_indicator_strips, drums, cabinets",
+                "refridgerator": "yes"
+            }
+        },
+        {
+            "id": 30,
+            "name": "02 Ketema Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.70007798",
+                "specific_area_name": "Bole",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "112744-8",
+                "ahunode": "30605"
+            }
+        },
+        {
+            "id": 31,
+            "name": "02 Post A Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.10441660",
+                "Settlement": "urban",
+                "specific_area_name": "Metu",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "103197-0",
+                "hmis_code": "4032000301",
+                "ahunode": "40320"
+            }
+        },
+        {
+            "id": 32,
+            "name": "02 Post B Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.10441660",
+                "Settlement": "urban",
+                "specific_area_name": "Metu",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "103198-8",
+                "hmis_code": "No HMIS Code",
+                "ahunode": "40320"
+            }
+        },
+        {
+            "id": 33,
+            "name": "02Kebele Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "lat": 11.39778,
+            "long": 38.23878,
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.60018115",
+                "year_opened": 2009,
+                "specific_area_name": "Wegida",
+                "facility_type": "Health_Center",
+                "facility_type-1": "Health Center",
+                "24hour_service": "yes",
+                "sterilized_loc": "sterlized_onsite",
+                "medwaste_disposal": "openburn_pit",
+                "general_services": [
+                    "Child_Vaccination",
+                    "GMP",
+                    "Curative_services",
+                    "FP",
+                    "ANC_Services",
+                    "PMTCT_Services",
+                    "Delivery_Normal",
+                    "Malaria_DT",
+                    "STI_DT",
+                    "TB_DT",
+                    "HIV_TC",
+                    "HIV_ART",
+                    "NCD_Diag_Mngt",
+                    "Surgical_Minor",
+                    "Lab_Dx",
+                    "Blood_Typing",
+                    "Ped_Emrg_Serv",
+                    "Emergency_Services"
+                ],
+                "sharps_disposal": "openburn_pit",
+                "hiv_testing_onsite": [
+                    "hiv_testing_onsite",
+                    "hiv_rdt"
+                ],
+                "clinical_chemistry": [
+                    "liver_function",
+                    "urine_protein",
+                    "urine_glucose",
+                    "urine_pregnancy"
+                ],
+                "parasitology_services": [
+                    "malaria_test",
+                    "malaria_rdt",
+                    "stool_microscopy"
+                ],
+                "tb_testing": [
+                    "tb_test"
+                ],
+                "operational_status": "fully_functional",
+                "beds": 2,
+                "water_supply": "severe_shortages",
+                "hmis_implementation": "paperbased",
+                "protected_waiting_for_pregnant_woman": "yes",
+                "water_source_type": [
+                    "river_water"
+                ],
+                "freezer": false,
+                "microscope": "yes",
+                "incubator": "no",
+                "centrifuge": "no",
+                "ethiopian_national_identifier": "101534-6",
+                "spaplus_fac_code": "30629",
+                "hmis_code": "30207002",
+                "altitude_m": 2557,
+                "ahunode": "30207",
+                "sterlization_equipment": "pot_nonelectric, stove_cooker, drums",
+                "refridgerator": "yes"
+            }
+        },
+        {
+            "id": 34,
+            "name": "02Kebele Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.87992011",
+                "specific_area_name": "Dejen 01Kebele",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "115117-4",
+                "ahunode": "30613"
+            }
+        },
+        {
+            "id": 35,
+            "name": "03 Health Post",
+            "createdAt": "2018-03-07T21:45:56.000Z",
+            "updatedAt": "2018-03-07T21:45:56.000Z",
+            "lat": 11.2469,
+            "long": 38.39208,
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.60018115",
+                "year_opened": 1980,
+                "specific_area_name": "Grarua",
+                "facility_type": "Health_Center",
+                "facility_type-1": "Health Center",
+                "24hour_service": "yes",
+                "sterilized_loc": "sterlized_onsite",
+                "medwaste_disposal": "openburn_pit",
+                "general_services": [
+                    "Child_Vaccination",
+                    "GMP",
+                    "Curative_services",
+                    "FP",
+                    "ANC_Services",
+                    "PMTCT_Services",
+                    "Delivery_Normal",
+                    "Malaria_DT",
+                    "STI_DT",
+                    "TB_DT",
+                    "HIV_TC",
+                    "HIV_ART",
+                    "HIV_CS",
+                    "NCD_Diag_Mngt",
+                    "Surgical_Minor",
+                    "Lab_Dx",
+                    "Blood_Typing",
+                    "Ped_Emrg_Serv",
+                    "Emergency_Services",
+                    "Inpatient_Services"
+                ],
+                "sharps_disposal": "incinerator_1chamber",
+                "hematology_services": [
+                    "hemoglobin",
+                    "cd4"
+                ],
+                "hiv_testing_onsite": [
+                    "hiv_testing_onsite",
+                    "hiv_rdt"
+                ],
+                "hiv_testing_external_type": [
+                    "pcr_eid"
+                ],
+                "clinical_chemistry": [
+                    "blood_glucose",
+                    "liver_function",
+                    "urine_protein",
+                    "urine_glucose",
+                    "urine_pregnancy"
+                ],
+                "parasitology_services": [
+                    "malaria_test",
+                    "stool_microscopy"
+                ],
+                "sti_services": [
+                    "syphilis_test",
+                    "syphilis_rdt"
+                ],
+                "tb_testing": [
+                    "tb_test",
+                    "tb_test_offsite"
+                ],
+                "numb_ambulances_onsite": 1,
+                "operational_status": "fully_functional",
+                "beds": 7,
+                "communications": [
+                    "computer"
+                ],
+                "water_supply": "not_severe_shortages",
+                "source_power": [
+                    "grid"
+                ],
+                "hmis_implementation": "both_paper_electronic",
+                "protected_waiting_for_pregnant_woman": "yes",
+                "water_source_type": [
+                    "tap_water"
+                ],
+                "freezer": false,
+                "microscope": "yes",
+                "incubator": "no",
+                "centrifuge": "yes",
+                "ethiopian_national_identifier": "100463-9",
+                "spaplus_fac_code": "30630",
+                "hmis_code": "3020700311",
+                "altitude_m": 2396,
+                "ahunode": "30207",
+                "sterlization_equipment": "drysterilizer_elect, timer, chemical_hld, drums, cabinets",
+                "refridgerator": "yes"
+            }
+        },
+        {
+            "id": 36,
+            "name": "03 Health Post",
+            "createdAt": "2018-03-07T21:45:57.000Z",
+            "updatedAt": "2018-03-07T21:45:57.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.49530779",
+                "specific_area_name": "M0Tta",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "109084-4",
+                "hmis_code": "3061800302",
+                "ahunode": "30618"
+            }
+        },
+        {
+            "id": 37,
+            "name": "03 Health Post",
+            "createdAt": "2018-03-07T21:45:57.000Z",
+            "updatedAt": "2018-03-07T21:45:57.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.93482189",
+                "Settlement": "urban",
+                "specific_area_name": "Shakiso",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "116080-3",
+                "hmis_code": "No HMIS Code",
+                "ahunode": "41490"
+            }
+        },
+        {
+            "id": 38,
+            "name": "03 Health Post",
+            "createdAt": "2018-03-07T21:45:57.000Z",
+            "updatedAt": "2018-03-07T21:45:57.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.64067613",
+                "specific_area_name": "Kortagdhere Kebele",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "111806-6",
+                "hmis_code": "503050027",
+                "ahunode": "50305"
+            }
+        },
+        {
+            "id": 39,
+            "name": "03 Health Post",
+            "createdAt": "2018-03-07T21:45:57.000Z",
+            "updatedAt": "2018-03-07T21:45:57.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "specific_area_name": "03Kebele",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "117257-6",
+                "hmis_code": "502040054",
+                "ahunode": "No HMIS Code"
+            }
+        },
+        {
+            "id": 40,
+            "name": "03 kebele",
+            "createdAt": "2018-03-07T21:45:57.000Z",
+            "updatedAt": "2018-03-07T21:45:57.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Settlement": "urban",
+                "specific_area_name": "03 kebele",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "117102-4",
+                "hmis_code": "1205000303",
+                "ahunode": "#REF!"
+            }
+        },
+        {
+            "id": 41,
+            "name": "03 Kebele Health Post",
+            "createdAt": "2018-03-07T21:45:57.000Z",
+            "updatedAt": "2018-03-07T21:45:57.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.18838097",
+                "specific_area_name": "Mariam Minch(Sefer 1)",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "105074-9",
+                "ahunode": "30604"
+            }
+        },
+        {
+            "id": 42,
+            "name": "03 Kebele Health Post",
+            "createdAt": "2018-03-07T21:45:57.000Z",
+            "updatedAt": "2018-03-07T21:45:57.000Z",
+            "lat": 11.84668,
+            "long": 38.00489,
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.20671404",
+                "specific_area_name": "Genet Sefer",
+                "facility_type": "Health_Center",
+                "facility_type-1": "Health Center",
+                "operational_status": "not_functional",
+                "freezer": false,
+                "ethiopian_national_identifier": "105293-5",
+                "spaplus_fac_code": "30632",
+                "altitude_m": 2708,
+                "ahunode": "30210"
+            }
+        },
+        {
+            "id": 43,
+            "name": "03 Kebele Urban Health Post",
+            "createdAt": "2018-03-07T21:45:57.000Z",
+            "updatedAt": "2018-03-07T21:45:57.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.00885942",
+                "specific_area_name": "Bergibi",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "102272-2",
+                "hmis_code": "3050800314",
+                "ahunode": "30508"
+            }
+        },
+        {
+            "id": 44,
+            "name": "03 Kebele Urban Health Post",
+            "createdAt": "2018-03-07T21:45:57.000Z",
+            "updatedAt": "2018-03-07T21:45:57.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.51373738",
+                "Settlement": "urban",
+                "specific_area_name": "Ambo",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "109309-5",
+                "hmis_code": "No HMIS Code",
+                "ahunode": "40515"
+            }
+        },
+        {
+            "id": 45,
+            "name": "03 Kebele Urban Health Post",
+            "createdAt": "2018-03-07T21:45:57.000Z",
+            "updatedAt": "2018-03-07T21:45:57.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.51538695",
+                "specific_area_name": "Bati",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "109353-3",
+                "ahunode": "31002"
+            }
+        },
+        {
+            "id": 46,
+            "name": "03 Post A Health Post",
+            "createdAt": "2018-03-07T21:45:57.000Z",
+            "updatedAt": "2018-03-07T21:45:57.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.10441660",
+                "Settlement": "urban",
+                "specific_area_name": "Metu",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "103199-6",
+                "hmis_code": "4032000302",
+                "ahunode": "40320"
+            }
+        },
+        {
+            "id": 47,
+            "name": "03 Post B Health Post",
+            "createdAt": "2018-03-07T21:45:57.000Z",
+            "updatedAt": "2018-03-07T21:45:57.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.10441660",
+                "Settlement": "urban",
+                "specific_area_name": "Metu",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "103200-2",
+                "hmis_code": "No HMIS Code",
+                "ahunode": "40320"
+            }
+        },
+        {
+            "id": 48,
+            "name": "03Kebele Ketema Health Post",
+            "createdAt": "2018-03-07T21:45:57.000Z",
+            "updatedAt": "2018-03-07T21:45:57.000Z",
+            "lat": 11.8618,
+            "long": 38.00494,
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.20671404",
+                "year_opened": 2010,
+                "specific_area_name": "Gafat",
+                "facility_type": "Health_Center",
+                "facility_type-1": "Health Center",
+                "24hour_service": "yes",
+                "sterilized_loc": "sterlized_onsite",
+                "medwaste_disposal": "incinerator_2chamber",
+                "general_services": [
+                    "Child_Vaccination",
+                    "GMP",
+                    "Curative_services",
+                    "FP",
+                    "ANC_Services",
+                    "PMTCT_Services",
+                    "Delivery_Normal",
+                    "Malaria_DT",
+                    "STI_DT",
+                    "TB_DT",
+                    "HIV_TC",
+                    "HIV_CS",
+                    "NCD_Diag_Mngt",
+                    "Surgical_Minor",
+                    "Lab_Dx",
+                    "Blood_Typing",
+                    "Ped_Emrg_Serv",
+                    "Emergency_Services",
+                    "Inpatient_Services"
+                ],
+                "sharps_disposal": "incinerator_1chamber",
+                "hiv_testing_onsite": [
+                    "hiv_testing_onsite",
+                    "hiv_rdt"
+                ],
+                "clinical_chemistry": [
+                    "blood_glucose",
+                    "liver_function",
+                    "urine_protein",
+                    "urine_glucose",
+                    "urine_pregnancy"
+                ],
+                "parasitology_services": [
+                    "malaria_test",
+                    "malaria_rdt",
+                    "stool_microscopy"
+                ],
+                "sti_services": [
+                    "syphilis_test",
+                    "syphilis_rdt"
+                ],
+                "tb_testing": [
+                    "tb_test"
+                ],
+                "operational_status": "fully_functional",
+                "beds": 6,
+                "communications": [
+                    "landline_telephone",
+                    "computer"
+                ],
+                "water_supply": "not_severe_shortages",
+                "source_power": [
+                    "grid"
+                ],
+                "hmis_implementation": "paperbased",
+                "protected_waiting_for_pregnant_woman": "yes",
+                "water_source_type": [
+                    "tap_water"
+                ],
+                "freezer": false,
+                "microscope": "yes",
+                "incubator": "no",
+                "centrifuge": "yes",
+                "ethiopian_national_identifier": "101716-9",
+                "spaplus_fac_code": "30633",
+                "altitude_m": 2700,
+                "ahunode": "30210",
+                "sterlization_equipment": "drysterilizer_elect, timer, tst_indicator_strips, chemical_hld, drums",
+                "refridgerator": "yes"
+            }
+        },
+        {
+            "id": 49,
+            "name": "03kebele Ketema Health Post",
+            "createdAt": "2018-03-07T21:45:57.000Z",
+            "updatedAt": "2018-03-07T21:45:57.000Z",
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.70007798",
+                "specific_area_name": "Bole",
+                "facility_type": "Health_Post",
+                "facility_type-1": "Health Post",
+                "freezer": false,
+                "ethiopian_national_identifier": "112745-5",
+                "ahunode": "30605"
+            }
+        },
+        {
+            "id": 50,
+            "name": "04 Health Center",
+            "createdAt": "2018-03-07T21:45:57.000Z",
+            "updatedAt": "2018-03-07T21:45:57.000Z",
+            "lat": 9.54393,
+            "long": 36.50105,
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.57026862",
+                "year_opened": 2010,
+                "specific_area_name": "Arkumbe Mender2",
+                "facility_type": "Health_Center",
+                "facility_type-1": "Health Center",
+                "24hour_service": "yes",
+                "sterilized_loc": "sterlized_onsite",
+                "medwaste_disposal": "openburn_pit",
+                "general_services": [
+                    "Child_Vaccination",
+                    "GMP",
+                    "Curative_services",
+                    "FP",
+                    "ANC_Services",
+                    "PMTCT_Services",
+                    "Delivery_Normal",
+                    "Malaria_DT",
+                    "STI_DT",
+                    "TB_DT",
+                    "HIV_TC",
+                    "NCD_Diag_Mngt",
+                    "Surgical_Minor",
+                    "Lab_Dx",
+                    "Blood_Typing",
+                    "Ped_Emrg_Serv",
+                    "Emergency_Services"
+                ],
+                "sharps_disposal": "openburn_pit",
+                "hematology_services": [
+                    "hemoglobin"
+                ],
+                "hiv_testing_onsite": [
+                    "hiv_testing_onsite",
+                    "hiv_rdt"
+                ],
+                "clinical_chemistry": [
+                    "liver_function",
+                    "urine_protein",
+                    "urine_glucose",
+                    "urine_pregnancy"
+                ],
+                "parasitology_services": [
+                    "malaria_test",
+                    "malaria_rdt",
+                    "stool_microscopy"
+                ],
+                "sti_services": [
+                    "syphilis_test"
+                ],
+                "tb_testing": [
+                    "tb_test"
+                ],
+                "numb_ambulances_onsite": 0,
+                "operational_status": "fully_functional",
+                "beds": 2,
+                "water_supply": "severe_shortages",
+                "hmis_implementation": "paperbased",
+                "protected_waiting_for_pregnant_woman": "yes",
+                "water_source_type": [
+                    "protected_well_water"
+                ],
+                "freezer": false,
+                "microscope": "yes",
+                "incubator": "no",
+                "centrifuge": "no",
+                "ethiopian_national_identifier": "101196-4",
+                "spaplus_fac_code": "31563",
+                "hmis_code": "No HMIS Code",
+                "altitude_m": 1450,
+                "ahunode": "40201",
+                "sterlization_equipment": "stove_cooker, chemical_hld",
+                "refridgerator": "no"
+            }
+        },
+        {
+            "id": 51,
+            "name": "04 Health Post",
+            "createdAt": "2018-03-07T21:45:57.000Z",
+            "updatedAt": "2018-03-07T21:45:57.000Z",
+            "lat": 11.85189,
+            "long": 38.0222,
+            "properties": {
+                "ownership": "gov",
+                "ownership-1": "Government",
+                "Admin_health_hierarchy": "ET.20671404",
+                "year_opened": 2002,
+                "specific_area_name": "Around Mehanealem",
+                "facility_type": "Health_Center",
+                "facility_type-1": "Health Center",
+                "24hour_service": "yes",
+                "sterilized_loc": "sterlized_onsite",
+                "medwaste_disposal": "openburn_flat",
+                "general_services": [
+                    "Child_Vaccination",
+                    "GMP",
+                    "Curative_services",
+                    "FP",
+                    "ANC_Services",
+                    "PMTCT_Services",
+                    "Delivery_Normal",
+                    "Malaria_DT",
+                    "STI_DT",
+                    "TB_DT",
+                    "HIV_TC",
+                    "HIV_ART",
+                    "HIV_CS",
+                    "NCD_Diag_Mngt",
+                    "Surgical_Minor",
+                    "Lab_Dx",
+                    "Blood_Typing",
+                    "Ped_Emrg_Serv",
+                    "Emergency_Services",
+                    "Inpatient_Services"
+                ],
+                "sharps_disposal": "incinerator_1chamber",
+                "hematology_services": [
+                    "hemoglobin"
+                ],
+                "hiv_testing_onsite": [
+                    "hiv_testing_onsite",
+                    "hiv_rdt"
+                ],
+                "hiv_testing_external_type": [
+                    "pcr_eid"
+                ],
+                "clinical_chemistry": [
+                    "blood_glucose",
+                    "liver_function",
+                    "urine_protein",
+                    "urine_glucose",
+                    "urine_pregnancy"
+                ],
+                "parasitology_services": [
+                    "stool_microscopy"
+                ],
+                "sti_services": [
+                    "syphilis_test",
+                    "syphilis_rdt"
+                ],
+                "tb_testing": [
+                    "tb_test",
+                    "tb_test_offsite"
+                ],
+                "operational_status": "fully_functional",
+                "beds": 5,
+                "communications": [
+                    "computer"
+                ],
+                "water_supply": "severe_shortages",
+                "source_power": [
+                    "grid",
+                    "generator_fuel",
+                    "generator_batt",
+                    "solar_system"
+                ],
+                "hmis_implementation": "both_paper_electronic",
+                "protected_waiting_for_pregnant_woman": "yes",
+                "water_source_type": [
+                    "tap_water"
+                ],
+                "freezer": false,
+                "microscope": "yes",
+                "incubator": "no",
+                "centrifuge": "yes",
+                "ethiopian_national_identifier": "100275-7",
+                "spaplus_fac_code": "30634",
+                "altitude_m": 2708,
+                "ahunode": "30210",
+                "sterlization_equipment": "drysterilizer_elect, drums",
+                "refridgerator": "yes"
+            }
+        }
+    ]
+}

@@ -1,0 +1,99 @@
+{
+    "id": 35,
+    "name": "03 Health Post",
+    "createdAt": "2018-03-07T21:45:56.000Z",
+    "updatedAt": "2018-03-07T21:45:56.000Z",
+    "lat": 11.2469,
+    "long": 38.39208,
+    "properties": {
+        "ownership": "gov",
+        "ownership-1": "Government",
+        "Admin_health_hierarchy": "ET.60018115",
+        "year_opened": 1980,
+        "specific_area_name": "Grarua",
+        "facility_type": "Health_Center",
+        "facility_type-1": "Health Center",
+        "24hour_service": "yes",
+        "sterilized_loc": "sterlized_onsite",
+        "medwaste_disposal": "openburn_pit",
+        "general_services": [
+            "Child_Vaccination",
+            "GMP",
+            "Curative_services",
+            "FP",
+            "ANC_Services",
+            "PMTCT_Services",
+            "Delivery_Normal",
+            "Malaria_DT",
+            "STI_DT",
+            "TB_DT",
+            "HIV_TC",
+            "HIV_ART",
+            "HIV_CS",
+            "NCD_Diag_Mngt",
+            "Surgical_Minor",
+            "Lab_Dx",
+            "Blood_Typing",
+            "Ped_Emrg_Serv",
+            "Emergency_Services",
+            "Inpatient_Services"
+        ],
+        "sharps_disposal": "incinerator_1chamber",
+        "hematology_services": [
+            "hemoglobin",
+            "cd4"
+        ],
+        "hiv_testing_onsite": [
+            "hiv_testing_onsite",
+            "hiv_rdt"
+        ],
+        "hiv_testing_external_type": [
+            "pcr_eid"
+        ],
+        "clinical_chemistry": [
+            "blood_glucose",
+            "liver_function",
+            "urine_protein",
+            "urine_glucose",
+            "urine_pregnancy"
+        ],
+        "parasitology_services": [
+            "malaria_test",
+            "stool_microscopy"
+        ],
+        "sti_services": [
+            "syphilis_test",
+            "syphilis_rdt"
+        ],
+        "tb_testing": [
+            "tb_test",
+            "tb_test_offsite"
+        ],
+        "numb_ambulances_onsite": 1,
+        "operational_status": "fully_functional",
+        "beds": 7,
+        "communications": [
+            "computer"
+        ],
+        "water_supply": "not_severe_shortages",
+        "source_power": [
+            "grid"
+        ],
+        "hmis_implementation": "both_paper_electronic",
+        "protected_waiting_for_pregnant_woman": "yes",
+        "water_source_type": [
+            "tap_water"
+        ],
+        "freezer": false,
+        "microscope": "yes",
+        "incubator": "no",
+        "centrifuge": "yes",
+        "ethiopian_national_identifier": "100463-9",
+        "spaplus_fac_code": "30630",
+        "hmis_code": "3020700311",
+        "altitude_m": 2396,
+        "ahunode": "30207",
+        "sterlization_equipment": "drysterilizer_elect, timer, chemical_hld, drums, cabinets",
+        "refridgerator": "yes"
+    }
+}
