@@ -1,6 +1,6 @@
 {
     "urn": "urn",
-    "version": "0.0.13",
+    "version": "0.0.17",
     "name": "MFR",
     "description": "Fetch facility records from MFR",
     "defaultChannelConfig": [
@@ -72,7 +72,7 @@
     "config": {
       "baseurl": "https://resourcemap.eth.instedd.org",
       "collectionname": "Ethiopia Health Facility Registry",
-      "siteidtosync": "33",
+      "siteidtosync": "19",
       "DHIS2baseurl": "http://localhost:8081"
     }
   }
