@@ -1,6 +1,6 @@
 {
     "urn": "urn",
-    "version": "0.0.17",
+    "version": "0.0.19",
     "name": "MFR",
     "description": "Fetch facility records from MFR",
     "defaultChannelConfig": [

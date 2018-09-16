@@ -34,9 +34,12 @@ function setupApp () {
     var site_req = '/api/sites'
     var layer_req = '/fields.json'
     var organisationUnit_req = '/api/organisationUnits'
-    var organisationUnitRegister_req = '/api/metadata?identifier=code&importStrategy=CREATE_AND_UPDATE'
-    var organisationUnitSearch_req = '?filter=name:eq:';
+    var organisationUnitRegister_req = '/api/metadata?identifier=AUTO&importStrategy=CREATE_AND_UPDATE'
+    var organisationUnitUpdate_req = '/api/metadata?identifier=AUTO&importStrategy=UPDATE'
+    var organisationUnitSearch_req = '?filter=name:eq:'
+    var organisationUnitSearch_req_code = '?filter=code:eq:'
     var last_added = '/last_added'
+    var last_updated = '/last_updated'
     var headers = { 'content-type': 'application/json' }
 
     //What i have added
@@ -60,7 +63,24 @@ function setupApp () {
       res.set('Content-Type', 'application/json+openhim')
 
       // construct return object
-      res.send(utils.buildReturnObject(mediatorConfig.urn, 'Failed', 404, headers, lastAdded, orchestrations, properties))
+      res.send(utils.buildReturnObject(mediatorConfig.urn, 'Failed', 404, headers, lastAdded, 
+                  orchestrations, properties))
+      return
+    }
+
+    let lastUpdated
+    try {
+      lastUpdated = await fs.readFileSync(__dirname + last_updated, 'utf8')
+    } catch (err) {
+      lastUpdated = err.message
+      const headers = { 'content-type': 'application/text' }
+
+      // set content type header so that OpenHIM knows how to handle the response
+      res.set('Content-Type', 'application/json+openhim')
+
+      // construct return object
+      res.send(utils.buildReturnObject(mediatorConfig.urn, 'Failed', 404, headers, lastUpdated, 
+                orchestrations, properties))
       return
     }
 
@@ -132,62 +152,6 @@ function setupApp () {
     }
     console.log("Collection ID: " + collection_id)
 
-    /******************************************
-        FETCH SITE DETAIL INFORMATION
-        Connects to MFR API for site detail
-    *******************************************/
-    
-    let mfrSiteDetailResponseBody
-    try{
-      //Fetch site detail
-      var site_detail = await fetch(mediatorConfig.config.baseurl + collection_req + '/' + 
-                                      collection_id + '.json' + '?created_since=' + lastAdded + 
-                                      '&page=50', {
-        method: "GET",
-        headers: {
-          "Authorization":"Basic " + encoded
-        }
-      });
-    } catch (err) {
-      mfrSiteDetailResponseBody = err.message
-      const headers = { 'content-type': 'application/text' }
-
-      // set content type header so that OpenHIM knows how to handle the response
-      res.set('Content-Type', 'application/json+openhim')
-
-      // construct return object
-      res.send(utils.buildReturnObject(mediatorConfig.urn, 'Failed', 404, headers, mfrSiteDetailResponseBody, 
-                orchestrations, properties))
-      return
-    }
-
-    var sites = await site_detail.json();
-    console.log("============URL==========" + mediatorConfig.config.baseurl + collection_req + '/' + 
-    collection_id + '.json' + '?created_since=' + lastAdded + 
-    '&page=10');
-    console.log("==============Sites===========" + sites.sites)
-    if (typeof sites.error !== 'undefined') {
-      mfrSiteDetailResponseBody = sites.error;
-      const headers = { 'content-type': 'application/text' }
-
-      // set content type header so that OpenHIM knows how to handle the response
-      res.set('Content-Type', 'application/json+openhim')
-
-      // construct return object
-      res.send(utils.buildReturnObject(mediatorConfig.urn, 'Failed', 404, headers, mfrSiteDetailResponseBody, 
-                orchestrations, properties))
-      return
-    }
-
-    var responseBody = JSON.stringify(sites)
-    
-    // capture orchestration data
-    var orchestrationResponse = { statusCode: 200, headers: headers }
-    //let orchestrations = []
-    orchestrations.push(utils.buildOrchestration('Primary Route', new Date().getTime(), req.method, req.url, req.headers, 
-                        req.body, orchestrationResponse, responseBody))
-
-
     /**************************************
          FETCH LAYER INFORMATION
          Connects to MFR API for layers
@@ -230,7 +194,7 @@ function setupApp () {
       return
     }
 
-    var responseBody = JSON.stringify(layer)
+    responseBody = JSON.stringify(layer)
     
     // capture orchestration data
     var orchestrationResponse = { statusCode: 200, headers: headers }
@@ -238,17 +202,18 @@ function setupApp () {
     orchestrations.push(utils.buildOrchestration('Primary Route', new Date().getTime(), req.method, req.url, req.headers, 
                         req.body, orchestrationResponse, responseBody))
     
-    /*****************************************
-         BUILD TREE FOR THE LAYER HIERARCHY
-         use data-tree npm
-    ******************************************/
+      
+  /*****************************************
+    BUILD TREE FOR THE LAYER HIERARCHY
+    use data-tree npm
+  ******************************************/
     
     let hierarchy
     for(var layer_element of layer) {
-      if(layer_element.id == 45) {
+      if(layer_element.name == 'General Information of the Facility') {
         var layer_fields = layer_element.fields
         for(var layer_field of layer_fields) {
-          if(layer_field.id == 26) {
+          if(layer_field.name == 'Administrative Health Hierarchy') {
             hierarchy = layer_field.config.hierarchy
             break
           }
@@ -262,7 +227,7 @@ function setupApp () {
       key: hierarchy_entry.id,
       value: {name: hierarchy_entry.name}
     })
-    console.log(hierarchy_entry.sub.length)
+    //console.log(hierarchy_entry.sub.length)
     for(var i = 0; i< hierarchy_entry.sub.length; i++) {
       var sub = hierarchy_entry.sub[i];
       var subNode = tree.insertToNode(rootNode, {
@@ -286,6 +251,209 @@ function setupApp () {
         }
       }
     }
+
+    responseBody = "Tree Structure Generated!"
+    
+    // capture orchestration data
+    var orchestrationResponse = { statusCode: 200, headers: headers }
+    //let orchestrations = []
+    orchestrations.push(utils.buildOrchestration('MFR Hierarchy', new Date().getTime(), req.method, req.url, req.headers, 
+                        req.body, orchestrationResponse, responseBody))
+    
+
+    /*****************************************
+      SYNC THE MFR HIERARCHY WITH DHIS2
+      use data-tree npm and the already 
+      constructed tree structure
+    ******************************************/
+
+    let return_data
+    //var i = 0;
+    
+    tree.traverser().traverseBFS(async function(node){
+      var nodeToInsert = null
+      var nodeKey = node.data().key
+      var nodeName = node.data().value.name
+      var parentKey = node.parentNode() == null ? '' : node.parentNode().data().key
+      var parentName = node.parentNode() == null ? '' : node.parentNode().data().value.name
+  
+      if(parentKey == '') { //Root node
+        //Fetch organisation unit information
+        try{
+          var ou_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req + 
+                            organisationUnitSearch_req_code + nodeKey, {
+            method: "GET",
+            headers: {
+              "Authorization":"Basic " + encodedDHIS2
+            }
+          })
+          .then(response => response.json())
+          .then(function handleData(data) {
+            return_data = data;
+          })
+        } catch(err) {
+          console.log("In Root Node - Fetch Organisation unit info: " + err)
+          return
+        }
+        //console.log("*************" + return_data + "**************");
+        if(return_data && return_data.organisationUnits.length == 0) { //node does not exist
+          var nodeToInsert = {
+              "name": "Federal Ministry of Health", 
+              "openingDate": '1980-06-15',
+              "shortName": "FMoH",
+              "code": nodeKey
+          }
+        }
+      } else {
+        //Fetch organisation unit information
+        try{
+        var ou_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req +  
+                          organisationUnitSearch_req_code + nodeKey, {
+          method: "GET",
+          headers: {
+            "Authorization":"Basic " + encodedDHIS2
+          }
+        })
+        .then(response => response.json())
+        .then(function handleData(data) {
+          return_data = data;
+        })
+      } catch(err) {
+        console.log("In branch Node - Fetch Organisation unit info: " + err)
+        return
+      }
+        if(return_data && return_data.organisationUnits.length == 0) { //node does not exist
+          //Fetch parent  organisation unit information
+         try{ 
+          var ou_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req + 
+                organisationUnitSearch_req_code + parentKey, {
+            method: "GET",
+            headers: {
+              "Authorization":"Basic " + encodedDHIS2
+              }
+            })
+          .then(response => response.json())
+          .then(function handleData(data) {
+            return_data = data;
+          })
+        } catch(err) {
+          console.log("In branch Node - Fetch Organisation unit parent info: " + err)
+          return
+        }
+          
+           //console.log()
+          if(return_data && return_data.organisationUnits.length > 0) {
+            console.log("%%%%%%%" + mediatorConfig.config.DHIS2baseurl + organisationUnit_req + 
+                        organisationUnitSearch_req_code + parentKey + "%%%%%%%")
+            console.log("%%%%%%%%" + JSON.stringify(return_data) + "%%%%%%%%")
+          var nodeToInsert = {
+            "name": nodeName, 
+            "openingDate": '1980-06-15',
+            "shortName": nodeName.substring(0, 49),
+            "code": nodeKey,
+            "parent":{
+              "id": return_data.organisationUnits[0].id
+            }
+          }
+          }
+        }
+      }
+
+      if(nodeToInsert != null){
+      //Add new parent Organisation Unit
+      try{
+      var insert_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req, {
+        method: "POST",
+        headers: {
+          "Authorization":"Basic " + encodedDHIS2,
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify(nodeToInsert)
+        
+      })
+      .then(response => response.json())
+      .then(function handleData(data) {
+        return_data = data;
+      })
+    } catch(err) {
+      console.log("Register Organisation unit info: " + err)
+      return
+    }
+  }
+      
+  })
+  
+  var responseBody = JSON.stringify(return_data)
+    
+  // capture orchestration data
+  var orchestrationResponse = { statusCode: 200, headers: headers }
+  //let orchestrations = []
+  orchestrations.push(utils.buildOrchestration('Hierarchy Sync DIS2', new Date().getTime(), req.method, 
+                      req.url, req.headers, req.body, orchestrationResponse, responseBody))
+
+   
+  /******************************************
+      FETCH SITE DETAIL INFORMATION
+      Connects to MFR API for site detail
+  *******************************************/
+  
+   let mfrSiteDetailResponseBody
+   var fetchURL = mediatorConfig.config.baseurl + collection_req + '/' + 
+                  collection_id + '.json' + '?created_since=' + lastAdded + '&page=592'
+   //var nextPage = true
+
+   while(fetchURL) {
+     console.log("^^^^^^^^^^^" + fetchURL + "^^^^^^^^^^")
+    try{
+      //Fetch site detail
+      var site_detail = await fetch(fetchURL, {
+        method: "GET",
+        headers: {
+          "Authorization":"Basic " + encoded
+        }
+      });
+    } catch (err) {
+      mfrSiteDetailResponseBody = err.message
+      const headers = { 'content-type': 'application/text' }
+
+      // set content type header so that OpenHIM knows how to handle the response
+      res.set('Content-Type', 'application/json+openhim')
+
+      // construct return object
+      res.send(utils.buildReturnObject(mediatorConfig.urn, 'Failed', 404, headers, mfrSiteDetailResponseBody, 
+                orchestrations, properties))
+      return
+    }
+
+    var sites = await site_detail.json();
+    
+    if (typeof sites.error !== 'undefined') {
+      mfrSiteDetailResponseBody = sites.error;
+      const headers = { 'content-type': 'application/text' }
+
+      // set content type header so that OpenHIM knows how to handle the response
+      res.set('Content-Type', 'application/json+openhim')
+
+      // construct return object
+      res.send(utils.buildReturnObject(mediatorConfig.urn, 'Failed', 404, headers, mfrSiteDetailResponseBody, 
+                orchestrations, properties))
+      return
+    }
+
+    responseBody = JSON.stringify(sites)
+    
+    // capture orchestration data
+    var orchestrationResponse = { statusCode: sites.status, headers: headers }
+    //let orchestrations = []
+    orchestrations.push(utils.buildOrchestration('Primary Route', new Date().getTime(), req.method, req.url, req.headers, 
+                        req.body, orchestrationResponse, responseBody))
+      
+
+    /*****************************************
+      SYNC NEWLY ADDED FACILITITES
+      Connects to MFR API for facilities and
+      writes them to DHIS2
+    ******************************************/
     
     let organisationUnits = []
     for(var n = 0; n < sites.sites.length; n++) {
@@ -297,6 +465,7 @@ function setupApp () {
       while(node) {
         parents.push ({
           "name": node._data.value.name,
+          "id": node.data().key,
           "openingDate": '1980-06-15',
           "shortName": node._data.value.name.substring(0, 49),
         })
@@ -306,10 +475,10 @@ function setupApp () {
       let parent_id
       for(var i = parents.length - 1; i >= 0; i--) {
         console.log(mediatorConfig.config.DHIS2baseurl + organisationUnit_req + 
-          organisationUnitSearch_req + parents[i].name)
+                      organisationUnitSearch_req_code + parents[i].id)
         //Fetch organisation unit information
         var ou_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req + 
-                                      organisationUnitSearch_req + parents[i].name, {
+                                      organisationUnitSearch_req_code + parents[i].id, {
           method: "GET",
           headers: {
             "Authorization":"Basic " + encodedDHIS2
@@ -319,9 +488,6 @@ function setupApp () {
         .then(function handleData(data) {
           return_data = data;
         })
-        //console.log(return_data.organisationUnits[0].id)
-        
-        //var ou = await ou_detail.json();
         
         if(return_data.organisationUnits.length > 0) {
           parent_id = return_data.organisationUnits[0].id
@@ -397,16 +563,16 @@ function setupApp () {
       }
       organisationUnits.push(organisationUnit)
 
-      console.log(mediatorConfig.config.DHIS2baseurl + organisationUnit_req)
-      console.log(JSON.stringify(organisationUnit))
-      var return_data
+      //console.log(mediatorConfig.config.DHIS2baseurl + organisationUnit_req)
+      //console.log(JSON.stringify(organisationUnit))
+      //var return_data
 
-      orchestrationResponse = { /*statusCode: 200, headers: headers*/ }
+      orchestrationResponse = {}//{ statusCode: 200, headers: headers }
       orchestrations.push(utils.buildOrchestration('Fetch specific site and do data transformation', new Date().getTime(), 
                             '', '', '', '', orchestrationResponse, JSON.stringify(organisationUnit)))
     }  
 
-    console.log("================Organisation Units=============" + organisationUnits)
+    //console.log("================Organisation Units=============" + organisationUnits)
     
     const dhisImport = {
       "organisationUnits": organisationUnits
@@ -427,23 +593,181 @@ function setupApp () {
       return_data = data;
     });
 
-
-
     responseBody = JSON.stringify(return_data);
     console.log(responseBody);
-   
+    
     orchestrations.push(utils.buildOrchestration('Register in DHIS2', new Date().getTime(), req.method, req.url, 
                         req.headers, req.body, orchestrationResponse, responseBody))
+    
+    //Manage page
+    fetchURL = sites.nextPage
+  } //While loop based on nextPage ends here  
+
+///////////////////////////////////////////////UPDATE////////////////////////////////////////
+
+/******************************************
+      FETCH SITE DETAIL INFORMATION
+      Connects to MFR API for site detail
+  *******************************************/
+ 
+ mfrSiteDetailResponseBody
+ fetchURL = mediatorConfig.config.baseurl + collection_req + '/' + 
+                collection_id + '.json' + '?updated_since=' + lastUpdated + '&page=592'
+ 
+ while(fetchURL) {
+   console.log("^^^^^^^^^^^" + fetchURL + "^^^^^^^^^^")
+  try{
+    //Fetch site detail
+    var site_detail = await fetch(fetchURL, {
+      method: "GET",
+      headers: {
+        "Authorization":"Basic " + encoded
+      }
+    });
+  } catch (err) {
+    mfrSiteDetailResponseBody = err.message
+    const headers = { 'content-type': 'application/text' }
 
     // set content type header so that OpenHIM knows how to handle the response
     res.set('Content-Type', 'application/json+openhim')
 
     // construct return object
-    var properties = { property: 'Primary Route' }
-    res.send(utils.buildReturnObject(mediatorConfig.urn, 'Successful', 200, headers, responseBody, 
-                                      orchestrations, properties))
+    res.send(utils.buildReturnObject(mediatorConfig.urn, 'Failed', 404, headers, mfrSiteDetailResponseBody, 
+              orchestrations, properties))
+    return
+  }
+
+  var sites = await site_detail.json();
+  
+  if (typeof sites.error !== 'undefined') {
+    mfrSiteDetailResponseBody = sites.error;
+    const headers = { 'content-type': 'application/text' }
+
+    // set content type header so that OpenHIM knows how to handle the response
+    res.set('Content-Type', 'application/json+openhim')
+
+    // construct return object
+    res.send(utils.buildReturnObject(mediatorConfig.urn, 'Failed', 404, headers, mfrSiteDetailResponseBody, 
+              orchestrations, properties))
+    return
+  }
+
+  responseBody = JSON.stringify(sites)
+  
+  // capture orchestration data
+  orchestrationResponse = { statusCode: sites.status, headers: headers }
+  //let orchestrations = []
+  orchestrations.push(utils.buildOrchestration('Primary Route', new Date().getTime(), req.method, req.url, req.headers, 
+                      req.body, orchestrationResponse, responseBody))
+    
+
+  /*****************************************
+    SYNC UPDATED FACILITITES
+    Connects to MFR API for facilities and
+    updates them to DHIS2
+  ******************************************/
+  
+  let organisationUnits = []
+  for(var n = 0; n < sites.sites.length; n++) {
+    
+    //Fetch organisation unit information
+    var ou_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req + 
+                                  organisationUnitSearch_req_code + 
+                                  sites.sites[n].properties.Admin_health_hierarchy, {
+      method: "GET",
+      headers: {
+      "Authorization":"Basic " + encodedDHIS2
+      }
+      })
+      .then(response => response.json())
+      .then(function handleData(data) {
+        return_data = data;
+      })
+
+    //if(return_data.organisationUnits.length > 0) {
+    var parent_id = return_data.organisationUnits[0].id
+    
+    //Fetch organisation unit information
+    var ou_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req + 
+                                organisationUnitSearch_req_code + 
+                                sites.sites[n].properties.ethiopian_national_identifier, {
+      method: "GET",
+      headers: {
+      "Authorization":"Basic " + encodedDHIS2
+      }
+      })
+      .then(response => response.json())
+      .then(function handleData(data) {
+        return_data = data;
+      })
+
+      var org_unit_id = return_data.organisationUnits[0].id
+
+      var organisationUnit = {
+        "id": org_unit_id,
+        "name": sites.sites[n].name, 
+        "openingDate": sites.sites[n].properties.year_opened ? sites.sites[n].properties.year_opened : 
+                        '1980-06-15',
+        "shortName": sites.sites[n].properties.short_name ? sites.sites[n].properties.short_name : 
+                      sites.sites[n].name.substring(0, 49), 
+        "latitude": sites.sites[n].lat,
+        "longitude": sites.sites[n].long,
+        "code": sites.sites[n].properties.ethiopian_national_identifier,
+        "phoneNumber": sites.sites[n].facility__official_phone_number,
+        "parent":{
+          "id": parent_id
+        }
+    }
+   
+    organisationUnits.push(organisationUnit)
+
+    orchestrationResponse = {}//{ statusCode: 200, headers: headers }
+    orchestrations.push(utils.buildOrchestration('Fetch specific site and do data transformation', 
+                          new Date().getTime(), '', '', '', '', orchestrationResponse, 
+                          JSON.stringify(organisationUnit)))
+  }  
+
+  const dhisImport = {
+    "organisationUnits": organisationUnits
+  }
+  
+  //Add new Organisation Units
+  var insert_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnitUpdate_req, {
+    method: "POST",
+    headers: {
+      "Authorization":"Basic " + encodedDHIS2,
+      "Content-Type":"application/json"
+    },
+    body: JSON.stringify(dhisImport)
+    
   })
-  return app
+  .then(response => response.json())
+  .then(function handleData(data) {
+    return_data = data;
+  });
+
+  responseBody = JSON.stringify(return_data);
+  console.log(responseBody);
+  
+  orchestrations.push(utils.buildOrchestration('Register in DHIS2', new Date().getTime(), req.method, req.url, 
+                      req.headers, req.body, orchestrationResponse, responseBody))
+  
+  //Manage page
+  fetchURL = sites.nextPage
+} //While loop based on nextPage ends here  
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+// set content type header so that OpenHIM knows how to handle the response
+res.set('Content-Type', 'application/json+openhim')
+
+// construct return object
+var properties = { property: 'Primary Route' }
+res.send(utils.buildReturnObject(mediatorConfig.urn, 'Successful', 200, headers, responseBody, 
+                                  orchestrations, properties))
+})
+return app
 }
 
 /**
