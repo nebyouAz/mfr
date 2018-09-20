@@ -17,6 +17,31 @@ exports.doencodeDHIS2 = function() {
   return encode.encode(tobeencoded, 'base64');
 }
 
+exports.returnShortName = function(name) {
+  let shortName;
+  if(name.endsWith('Federal Ministry of Helath')) {
+    shortName = name.replace('Federal Ministry of Helath', 'FMOH')
+  } else if(name.endsWith('Regional Health Bureau')) {
+    shortName = name.replace('Regional Health Bureau', 'RHB')
+  } else if(name.endsWith('Zonal Health Department')) {
+    shortName = name.replace('Zonal Health Department', 'ZHD')
+  } else if(name.endsWith('Woreda Health Office')) {
+    shortName = name.replace('Woreda Health Office', 'WorHO')
+  } else if(name.endsWith('Health Post')) {
+    shortName = name.replace('Health Post', 'HP')
+  } else if(name.endsWith('Health Center')) {
+    shortName = name.replace('Health Center', 'HC')
+  } else if(name.endsWith('Clinic')) {
+    shortName = name.replace('Clinic', 'C')
+  } else if(name.endsWith('Hospital')) {
+    shortName = name.replace('Hospital', 'HSP')
+  } else {
+    shortName = name
+  }
+  
+  return shortName
+}
+
 exports.buildOrchestration = (name, beforeTimestamp, method, url, requestHeaders, requestContent, res, body) => {
   let uri = URL.parse(url)
   return {

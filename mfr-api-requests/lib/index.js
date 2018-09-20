@@ -7,8 +7,9 @@ const winston = require('winston')
 const data_tree = require('data-tree')
 const utils = require('./utils')
 const fs = require('fs')
-//var Client = require('node-rest-client').Client;
 const fetch = require('node-fetch');
+const date = require('date-and-time');
+
 // Logging setup
 winston.remove(winston.transports.Console)
 winston.add(winston.transports.Console, {level: 'info', timestamp: true, colorize: true})
@@ -37,12 +38,12 @@ function setupApp () {
     var organisationUnitRegister_req = '/api/metadata?identifier=AUTO&importStrategy=CREATE_AND_UPDATE'
     var organisationUnitUpdate_req = '/api/metadata?identifier=AUTO&importStrategy=UPDATE'
     var organisationUnitSearch_req = '?filter=name:eq:'
+    var organisationUnitSearch_req_parent = '&filter=parent.id:eq:'
     var organisationUnitSearch_req_code = '?filter=code:eq:'
     var last_added = '/last_added'
     var last_updated = '/last_updated'
     var headers = { 'content-type': 'application/json' }
 
-    //What i have added
     var encoded = utils.doencode()
     var encodedDHIS2 = utils.doencodeDHIS2()
 
@@ -134,8 +135,8 @@ function setupApp () {
     // capture orchestration data
     var orchestrationResponse = { statusCode: 200, headers: headers }
     //let orchestrations = []
-    orchestrations.push(utils.buildOrchestration('Primary Route', new Date().getTime(), req.method, req.url, req.headers, 
-                        req.body, orchestrationResponse, responseBody))
+    orchestrations.push(utils.buildOrchestration('Primary Route', new Date().getTime(), req.method, 
+                      req.url, req.headers, req.body, orchestrationResponse, responseBody))
 
 
     var collection_id
@@ -199,8 +200,8 @@ function setupApp () {
     // capture orchestration data
     var orchestrationResponse = { statusCode: 200, headers: headers }
     //let orchestrations = []
-    orchestrations.push(utils.buildOrchestration('Primary Route', new Date().getTime(), req.method, req.url, req.headers, 
-                        req.body, orchestrationResponse, responseBody))
+    orchestrations.push(utils.buildOrchestration('Primary Route', new Date().getTime(), req.method, 
+                      req.url, req.headers, req.body, orchestrationResponse, responseBody))
     
       
   /*****************************************
@@ -257,8 +258,8 @@ function setupApp () {
     // capture orchestration data
     var orchestrationResponse = { statusCode: 200, headers: headers }
     //let orchestrations = []
-    orchestrations.push(utils.buildOrchestration('MFR Hierarchy', new Date().getTime(), req.method, req.url, req.headers, 
-                        req.body, orchestrationResponse, responseBody))
+    orchestrations.push(utils.buildOrchestration('MFR Hierarchy', new Date().getTime(), req.method, 
+                      req.url, req.headers, req.body, orchestrationResponse, responseBody))
     
 
     /*****************************************
@@ -300,7 +301,7 @@ function setupApp () {
           var nodeToInsert = {
               "name": "Federal Ministry of Health", 
               "openingDate": '1980-06-15',
-              "shortName": "FMoH",
+              "shortName": utils.returnShortName('Federal Ministry of Health'),
               "code": nodeKey
           }
         }
@@ -349,7 +350,7 @@ function setupApp () {
           var nodeToInsert = {
             "name": nodeName, 
             "openingDate": '1980-06-15',
-            "shortName": nodeName.substring(0, 49),
+            "shortName": utils.returnShortName(nodeName),
             "code": nodeKey,
             "parent":{
               "id": return_data.organisationUnits[0].id
@@ -445,8 +446,8 @@ function setupApp () {
     // capture orchestration data
     var orchestrationResponse = { statusCode: sites.status, headers: headers }
     //let orchestrations = []
-    orchestrations.push(utils.buildOrchestration('Primary Route', new Date().getTime(), req.method, req.url, req.headers, 
-                        req.body, orchestrationResponse, responseBody))
+    orchestrations.push(utils.buildOrchestration('Primary Route', new Date().getTime(), req.method, 
+                      req.url, req.headers, req.body, orchestrationResponse, responseBody))
       
 
     /*****************************************
@@ -467,7 +468,7 @@ function setupApp () {
           "name": node._data.value.name,
           "id": node.data().key,
           "openingDate": '1980-06-15',
-          "shortName": node._data.value.name.substring(0, 49),
+          "shortName": utils.returnShortName(node._data.value.name),
         })
         node = node._parentNode
       }
@@ -497,13 +498,13 @@ function setupApp () {
             var parentOrganisationUnit = {
               "name": parents[i].name, 
               "openingDate": '1980-06-15',
-              "shortName": parents[i].name.substring(0, 49),        
+              "shortName": utils.returnShortName(parents[i].name),        
             }
           } else {
             var parentOrganisationUnit = {
               "name": parents[i].name, 
               "openingDate": '1980-06-15',
-              "shortName": parents[i].name.substring(0, 49),
+              "shortName": utils.returnShortName(parents[i].name),
               "parent":{
                 "id": parent_id
               }
@@ -535,25 +536,185 @@ function setupApp () {
       
       console.log("==================Parent ID==============: " + parent_id)
       //console.log("The heirarchy value: " + sites[n].properties.Admin_health_hierarchy)
-
+      var parentPHCUCase = false
       if(parent_id) {
-        var organisationUnit = {
-              "name":sites.sites[n].name, 
-              "openingDate": sites.sites[n].properties.year_opened ? sites.sites[n].properties.year_opened : '1980-06-15',
-              "shortName": sites.sites[n].properties.short_name ? sites.sites[n].properties.short_name : sites.sites[n].name.substring(0, 49), 
-              "latitude": sites.sites[n].lat,
-              "longitude": sites.sites[n].long,
-              "code": sites.sites[n].properties.ethiopian_national_identifier,
-              "phoneNumber": sites.sites[n].facility__official_phone_number,
+        if(sites.sites[n].properties.isPhcu ) {
+          var found
+          if(sites.sites[n].properties.parentPhcuId != null) {//This is the child in the PHCU
+            //Search whether the PHCU parent is already in DHIS2 as parent
+            //Search by name and parent_id if available
+            //First fetch the PHCU parent detail from the sites array
+            var sitesArray = sites.sites;
+            found = sitesArray.find(function(element) {
+              return element['properties']['ethiopian_national_identifier'] == sites.sites[n].properties.parentPhcuId;
+            });
+          } else { //This is the parent in the PHCU
+            found = sites.sites[n]
+            parentPHCUCase = true
+          }
+          var phcu_return_data
+          var phcu_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req + 
+                                organisationUnitSearch_req + found.name + organisationUnitSearch_req_parent + 
+                                parent_id, {
+            method: "GET",
+            headers: {
+              "Authorization":"Basic " + encodedDHIS2
+            }
+          })
+          .then(response => response.json())
+          .then(function handleData(data) {
+              phcu_return_data = data;
+          })
+
+          if(phcu_return_data.organisationUnits.length > 0) { //The PHCU parent exists as a parent in DHIS2
+            //Check if it also exists as a child to this parent PHCU
+            var phcu_chid_return_Data
+            var phcu_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req + 
+                                organisationUnitSearch_req + found.name + organisationUnitSearch_req_code + 
+                                sites.sites[n].properties.parentPhcuId, {
+              method: "GET",
+              headers: {
+                "Authorization":"Basic " + encodedDHIS2
+              }
+            })
+            .then(response => response.json())
+            .then(function handleData(data) {
+              phcu_chid_return_Data = data;
+            })
+            if(phcu_chid_return_Data.organisationUnits.length == 0) { //Create it as a child to this parent PHCU in DHIS2
+              var phcuDataToInsert = {
+                "name":found.name, 
+                "openingDate": found.properties.year_opened ? found.properties.year_opened : 
+                              '1980-06-15',
+                "shortName": found.properties.short_name ? found.properties.short_name : 
+                              utils.returnShortName(found.name), 
+                "latitude": found.lat,
+                "longitude": found.long,
+                "code": sites.sites[n].properties.parentPhcuId,
+                "phoneNumber": found.facility__official_phone_number,
+                "parent":{
+                  "id": phcu_return_data.organisationUnits[0].id
+                }
+              }
+              try{
+                var phcu_insert_return_data
+                var phcu_insert_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req, {
+                  method: "POST",
+                  headers: {
+                    "Authorization":"Basic " + encodedDHIS2,
+                    "Content-Type":"application/json"
+                  },
+                  body: JSON.stringify(phcuDataToInsert)
+                  
+                })
+                .then(response => response.json())
+                .then(function handleData(data) {
+                  phcu_insert_return_data = data;
+                })
+              } catch(err) {
+                console.log("Register Organisation unit info: " + err)
+                return
+              }
+            }
+            //Update the parent info of the organisation unit defining its parent as the PHCU parent
+            parent_id = phcu_return_data.organisationUnits[0].id
+            
+          } else { //Create the PHCU parent as a parent and as a child as well in DHIS2
+            //As a parent
+            var phcuParentDataToInsert = {
+              "name":found.name, 
+              "openingDate": found.properties.year_opened ? found.properties.year_opened : 
+                            '1980-06-15',
+              "shortName": found.properties.short_name ? found.properties.short_name : 
+                            utils.returnShortName(found.name), 
+              "latitude": found.lat,
+              "longitude": found.long,
+              "code": sites.sites[n].properties.parentPhcuId,
+              "phoneNumber": found.facility__official_phone_number,
               "parent":{
                 "id": parent_id
               }
+            }
+            try{
+              var phcu_parent_insert_return_data
+              var phcu_insert_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req, {
+                method: "POST",
+                headers: {
+                  "Authorization":"Basic " + encodedDHIS2,
+                  "Content-Type":"application/json"
+                },
+                body: JSON.stringify(phcuParentDataToInsert)
+                
+              })
+              .then(response => response.json())
+              .then(function handleData(data) {
+                phcu_parent_insert_return_data = data;
+              })
+            } catch(err) {
+              console.log("Register Organisation unit info: " + err)
+              return
+            }
+            //As a child
+            var phcuChildDataToInsert = {
+              "name":found.name, 
+              "openingDate": found.properties.year_opened ? found.properties.year_opened : 
+                            '1980-06-15',
+              "shortName": found.properties.short_name ? found.properties.short_name : 
+                            utils.returnShortName(found.name), 
+              "latitude": found.lat,
+              "longitude": found.long,
+              "code": sites.sites[n].properties.parentPhcuId,
+              "phoneNumber": found.facility__official_phone_number,
+              "parent":{
+                "id": phcu_parent_insert_return_data.response.uid
+              }
+            }
+            try{
+              var phcu_child_insert_return_data
+              var phcu_insert_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req, {
+                method: "POST",
+                headers: {
+                  "Authorization":"Basic " + encodedDHIS2,
+                  "Content-Type":"application/json"
+                },
+                body: JSON.stringify(phcuChildDataToInsert)
+                
+              })
+              .then(response => response.json())
+              .then(function handleData(data) {
+                phcu_child_insert_return_data = data;
+              })
+            } catch(err) {
+              console.log("Register Organisation unit info: " + err)
+              return
+            }
+            //Update the parent info of the organisation unit defining its parent as the PHCU parent
+            parent_id = phcu_parent_insert_return_data.response.uid
+          }
+
+        
+        }
+        var organisationUnit = {
+          "name":sites.sites[n].name, 
+          "openingDate": sites.sites[n].properties.year_opened ? sites.sites[n].properties.year_opened : 
+                        '1980-06-15',
+          "shortName": sites.sites[n].properties.short_name ? sites.sites[n].properties.short_name : 
+                        utils.returnShortName(sites.sites[n].name), 
+          "latitude": sites.sites[n].lat,
+          "longitude": sites.sites[n].long,
+          "code": sites.sites[n].properties.ethiopian_national_identifier,
+          "phoneNumber": sites.sites[n].facility__official_phone_number,
+          "parent":{
+            "id": parent_id
+          }
         }
       } else {
         var organisationUnit = {
           "name":sites.sites[n].name, 
-          "openingDate": sites.sites[n].properties.year_opened ? sites.sites[n].properties.year_opened : '1980-06-15',
-          "shortName": sites.sites[n].properties.short_name ? sites.sites[n].properties.short_name : sites.sites[n].name.substring(0, 49), 
+          "openingDate": sites.sites[n].properties.year_opened ? sites.sites[n].properties.year_opened : 
+                          '1980-06-15',
+          "shortName": sites.sites[n].properties.short_name ? sites.sites[n].properties.short_name : 
+                      utils.returnShortName(sites.sites[n].name), 
           "latitude": sites.sites[n].lat,
           "longitude": sites.sites[n].long,
           "code": sites.sites[n].properties.ethiopian_national_identifier,
@@ -561,15 +722,13 @@ function setupApp () {
         
         }
       }
-      organisationUnits.push(organisationUnit)
-
-      //console.log(mediatorConfig.config.DHIS2baseurl + organisationUnit_req)
-      //console.log(JSON.stringify(organisationUnit))
-      //var return_data
+      if(!parentPHCUCase) {
+        organisationUnits.push(organisationUnit)
+      }
 
       orchestrationResponse = {}//{ statusCode: 200, headers: headers }
-      orchestrations.push(utils.buildOrchestration('Fetch specific site and do data transformation', new Date().getTime(), 
-                            '', '', '', '', orchestrationResponse, JSON.stringify(organisationUnit)))
+      orchestrations.push(utils.buildOrchestration('Fetch specific site and do data transformation', 
+                    new Date().getTime(), '', '', '', '', orchestrationResponse, JSON.stringify(organisationUnit)))
     }  
 
     //console.log("================Organisation Units=============" + organisationUnits)
@@ -602,7 +761,23 @@ function setupApp () {
     //Manage page
     fetchURL = sites.nextPage
   } //While loop based on nextPage ends here  
+  
+  //Update the last_added date/time
+  try {
+    let now = new Date();
+    fs.writeFileSync(__dirname + last_added, date.format(now, 'YYYY-MM-DD HH:mm:ssZ'), 'utf8')
+  } catch (err) {
+    lastAdded = err.message
+    const headers = { 'content-type': 'application/text' }
 
+    // set content type header so that OpenHIM knows how to handle the response
+    res.set('Content-Type', 'application/json+openhim')
+
+    // construct return object
+    res.send(utils.buildReturnObject(mediatorConfig.urn, 'Failed', 404, headers, lastAdded, 
+                orchestrations, properties))
+    return
+  }
 ///////////////////////////////////////////////UPDATE////////////////////////////////////////
 
 /******************************************
@@ -657,8 +832,8 @@ function setupApp () {
   // capture orchestration data
   orchestrationResponse = { statusCode: sites.status, headers: headers }
   //let orchestrations = []
-  orchestrations.push(utils.buildOrchestration('Primary Route', new Date().getTime(), req.method, req.url, req.headers, 
-                      req.body, orchestrationResponse, responseBody))
+  orchestrations.push(utils.buildOrchestration('Primary Route', new Date().getTime(), req.method, 
+                req.url, req.headers, req.body, orchestrationResponse, responseBody))
     
 
   /*****************************************
@@ -676,7 +851,7 @@ function setupApp () {
                                   sites.sites[n].properties.Admin_health_hierarchy, {
       method: "GET",
       headers: {
-      "Authorization":"Basic " + encodedDHIS2
+        "Authorization":"Basic " + encodedDHIS2
       }
       })
       .then(response => response.json())
@@ -709,7 +884,7 @@ function setupApp () {
         "openingDate": sites.sites[n].properties.year_opened ? sites.sites[n].properties.year_opened : 
                         '1980-06-15',
         "shortName": sites.sites[n].properties.short_name ? sites.sites[n].properties.short_name : 
-                      sites.sites[n].name.substring(0, 49), 
+                      utils.returnShortName(sites.sites[n].name), 
         "latitude": sites.sites[n].lat,
         "longitude": sites.sites[n].long,
         "code": sites.sites[n].properties.ethiopian_national_identifier,
@@ -755,7 +930,22 @@ function setupApp () {
   //Manage page
   fetchURL = sites.nextPage
 } //While loop based on nextPage ends here  
+//Update the last_updated date/time
+try {
+  let now = new Date();
+  fs.writeFileSync(__dirname + last_updated, date.format(now, 'YYYY-MM-DD HH:mm:ssZ'), 'utf8')
+} catch (err) {
+  lastUpdated = err.message
+  const headers = { 'content-type': 'application/text' }
 
+  // set content type header so that OpenHIM knows how to handle the response
+  res.set('Content-Type', 'application/json+openhim')
+
+  // construct return object
+  res.send(utils.buildReturnObject(mediatorConfig.urn, 'Failed', 404, headers, lastUpdated, 
+              orchestrations, properties))
+  return
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
