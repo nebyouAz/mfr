@@ -400,7 +400,7 @@ function setupApp () {
   
    let mfrSiteDetailResponseBody
    var fetchURL = mediatorConfig.config.baseurl + collection_req + '/' + 
-                  collection_id + '.json' + '?created_since=' + lastAdded + '&page=592'
+                  collection_id + '.json' + '?created_since=' + lastAdded + '&page=1'
    //var nextPage = true
 
    while(fetchURL) {
@@ -787,7 +787,7 @@ function setupApp () {
  
  mfrSiteDetailResponseBody
  fetchURL = mediatorConfig.config.baseurl + collection_req + '/' + 
-                collection_id + '.json' + '?updated_since=' + lastUpdated + '&page=592'
+                collection_id + '.json' + '?updated_since=' + lastUpdated + '&page=1'
  
  while(fetchURL) {
    console.log("^^^^^^^^^^^" + fetchURL + "^^^^^^^^^^")
