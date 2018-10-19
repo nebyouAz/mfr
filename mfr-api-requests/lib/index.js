@@ -56,6 +56,12 @@ function setupApp () {
     let lastAdded
     try {
       lastAdded = await fs.readFileSync(__dirname + last_added, 'utf8')
+      var dateValue = new Date(lastAdded);
+      
+      //Subtract three hours
+      dateValue.setHours(dateValue.getHours() - 3)
+      lastAdded = date.format(dateValue, 'YYYY-MM-DD HH:mm:ssZ')
+      console.log("Last Added Date/time: " + lastAdded)
     } catch (err) {
       lastAdded = err.message
       const headers = { 'content-type': 'application/text' }
@@ -72,6 +78,13 @@ function setupApp () {
     let lastUpdated
     try {
       lastUpdated = await fs.readFileSync(__dirname + last_updated, 'utf8')
+
+      dateValue = new Date(lastUpdated);
+      
+      //subtract three hours
+      dateValue.setHours(dateValue.getHours() - 3)
+      lastUpdated = date.format(dateValue, 'YYYY-MM-DD HH:mm:ssZ')
+      console.log("Last Added Date/time: " + lastUpdated)
     } catch (err) {
       lastUpdated = err.message
       const headers = { 'content-type': 'application/text' }
