@@ -553,13 +553,13 @@ function setupApp () {
       if(parent_id) {
         if(sites.sites[n].properties.isPhcu ) {
           var found
-          if(sites.sites[n].properties.parentPhcuId != null) {//This is the child in the PHCU
+          if(sites.sites[n].properties.phcuParentId != null) {//This is the child in the PHCU
             //Search whether the PHCU parent is already in DHIS2 as parent
             //Search by name and parent_id if available
             //First fetch the PHCU parent detail from the sites array
             var sitesArray = sites.sites;
             found = sitesArray.find(function(element) {
-              return element['properties']['ethiopian_national_identifier'] == sites.sites[n].properties.parentPhcuId;
+              return element['properties']['ethiopian_national_identifier'] == sites.sites[n].properties.phcuParentId;
             });
           } else { //This is the parent in the PHCU
             found = sites.sites[n]
@@ -584,7 +584,7 @@ function setupApp () {
             var phcu_chid_return_Data
             var phcu_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req + 
                                 organisationUnitSearch_req + found.name + organisationUnitSearch_req_code + 
-                                sites.sites[n].properties.parentPhcuId, {
+                                sites.sites[n].properties.phcuParentId, {
               method: "GET",
               headers: {
                 "Authorization":"Basic " + encodedDHIS2
@@ -603,7 +603,7 @@ function setupApp () {
                               utils.returnShortName(found.name), 
                 "latitude": found.lat,
                 "longitude": found.long,
-                "code": sites.sites[n].properties.parentPhcuId,
+                "code": sites.sites[n].properties.phcuParentId,
                 "phoneNumber": found.facility__official_phone_number,
                 "parent":{
                   "id": phcu_return_data.organisationUnits[0].id
@@ -642,7 +642,7 @@ function setupApp () {
                             utils.returnShortName(found.name), 
               "latitude": found.lat,
               "longitude": found.long,
-              "code": sites.sites[n].properties.parentPhcuId,
+              "code": sites.sites[n].properties.phcuParentId,
               "phoneNumber": found.facility__official_phone_number,
               "parent":{
                 "id": parent_id
@@ -676,7 +676,7 @@ function setupApp () {
                             utils.returnShortName(found.name), 
               "latitude": found.lat,
               "longitude": found.long,
-              "code": sites.sites[n].properties.parentPhcuId,
+              "code": sites.sites[n].properties.phcuParentId,
               "phoneNumber": found.facility__official_phone_number,
               "parent":{
                 "id": phcu_parent_insert_return_data.response.uid
