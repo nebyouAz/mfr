@@ -63,7 +63,7 @@
 
     ],
     "config": {
-      "baseurl": "https://resourcemap.eth.instedd.org",
+      "baseurl": "https://api.mfr.sandboxaddis.com",
       "collectionname": "Ethiopia Health Facility Registry",
       "DHIS2baseurl": "http://localhost:8081"
     }
