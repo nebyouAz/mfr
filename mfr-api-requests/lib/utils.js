@@ -3,8 +3,8 @@ const URL = require('url')
 
 exports.doencode = function() {
   const encode = require('nodejs-base64-encode');
-  var username = "fekadu_wannaw@et.jsi.com";
-  var password = "12345678";
+  var username = "dhis2_test@mfr.org";
+  var password = "123";
   var tobeencoded = username + ":" + password;
   return encode.encode(tobeencoded, 'base64');
 }
