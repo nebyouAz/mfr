@@ -1,6 +1,11 @@
 'use strict'
 const URL = require('url')
 
+exports.returnRootNodeName = function() {
+  let rootNodeName = "Federal Ministry of Health"
+  return rootNodeName
+}
+
 exports.doencode = function() {
   const encode = require('nodejs-base64-encode');
   var username = "dhis2_test@mfr.org";
@@ -17,9 +22,21 @@ exports.doencodeDHIS2 = function() {
   return encode.encode(tobeencoded, 'base64');
 }
 
+exports.returnCorrectName = function(name) {
+  let correctName;
+  if(name.endsWith('Addis Ababa Regional Health Bureau')) {
+    correctName = "Addis Ababa City Administration Health Bureau"
+  } else if(name.endsWith('Dire Dawa Regional Health Bureau')) {
+    correctName = "Dire Dawa City Administation Health Bureau"
+  } else {
+    correctName = name
+  }
+  return correctName
+}
+
 exports.returnShortName = function(name) {
   let shortName;
-  if(name.endsWith('Federal Ministry of Helath')) {
+  if(name.endsWith('Federal Ministry of Health')) {
     shortName = name.replace('Federal Ministry of Helath', 'FMOH')
   } else if(name.endsWith('Regional Health Bureau')) {
     shortName = name.replace('Regional Health Bureau', 'RHB')

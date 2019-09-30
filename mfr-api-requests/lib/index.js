@@ -236,33 +236,112 @@ function setupApp () {
     }
 
     var tree = dataTree.create()
-    var hierarchy_entry = hierarchy[0];
-    var rootNode = tree.insert({
-      key: hierarchy_entry.id,
-      value: {name: hierarchy_entry.name}
-    })
-    //console.log(hierarchy_entry.sub.length)
-    for(var i = 0; i< hierarchy_entry.sub.length; i++) {
-      var sub = hierarchy_entry.sub[i];
-      var subNode = tree.insertToNode(rootNode, {
-        key: sub.id,
-        value: {name: sub.name}
-      })
-      for(var j = 0; j < sub.sub.length; j++) {
-        var sub_sub = sub.sub[j]
-        var subSubNode = tree.insertToNode(subNode, {
-          key: sub_sub.id,
-          value: {name: sub_sub.name}
-        })
-        if(sub_sub.sub) {
-          for(var k = 0; k < sub_sub.sub.length; k++) {
-            var sub_sub_sub = sub_sub.sub[k]
-            var subSubSubNode = tree.insertToNode(subSubNode, {
-              key: sub_sub_sub.id,
-              value: {name: sub_sub_sub.name}
-            })
-          }
+    
+    //Fetch ID of root node
+    let mfrRootSiteResponseBody
+    try{
+      //Fetch layer detail
+      var root_detail = await fetch(mediatorConfig.config.baseurl + collection_req + '/' + 
+                                    collection_id + '.json?name=' + utils.returnCorrectName(utils.returnRootNodeName), {
+        method: "GET",
+        headers: {
+          "Authorization":"Basic " + encoded
         }
+      })
+    } catch (err) {
+      mfrRootSiteResponseBody = err.message
+      const headers = { 'content-type': 'application/text' }
+
+      // set content type header so that OpenHIM knows how to handle the response
+      res.set('Content-Type', 'application/json+openhim')
+
+      // construct return object
+      res.send(utils.buildReturnObject(mediatorConfig.urn, 'Failed', 404, headers, mfrRootSiteResponseBody, 
+                orchestrations, properties))
+      return
+    }
+
+    var mfrRootDetail = await root_detail.json();
+    var mfrRoot = mfrRootDetail.sites[0];
+
+    var rootNode = tree.insert({
+      key: mfrRoot.id,
+      value: {name: utils.returnCorrectName(utils.returnRootNodeName)}
+    })
+
+    //Work on the rest of the nodes under the root node
+    let reports_to
+    for(var i = 0; i< hierarchy.length; i++) {
+      reports_to = mfrRoot.id
+      //Fetch ID of root node
+      let mfrNodeSiteResponseBody
+      try{
+        //Fetch layer detail
+        var node_detail = await fetch(mediatorConfig.config.baseurl + collection_req + '/' + 
+                                      collection_id + '.json?name=' + utils.returnCorrectName(hierarchy[i].name) + '&reports_to=' + reports_to, {
+          method: "GET",
+          headers: {
+            "Authorization":"Basic " + encoded
+          }
+        })
+      } catch (err) {
+        mfrNodeSiteResponseBody = err.message
+        const headers = { 'content-type': 'application/text' }
+
+        // set content type header so that OpenHIM knows how to handle the response
+        res.set('Content-Type', 'application/json+openhim')
+
+        // construct return object
+        res.send(utils.buildReturnObject(mediatorConfig.urn, 'Failed', 404, headers, mfrNodeSiteResponseBody, 
+                  orchestrations, properties))
+        return
+      }
+
+      var mfrNodeDetail = await node_detail.json();
+      var nodeDescription = mfrNodeDetail.sites[0];
+
+      //Create the child node and insert it under the root node
+      var subNode = tree.insertToNode(rootNode, {
+        key: nodeDescription.id,
+        value: {name: nodeDescription.name}
+      })
+
+      reports_to = nodeDescription.id
+      var hierarchy_sub = hierarchy[i].sub;     
+      for(var j = 0; j < hierarchy_sub.length; j++) {
+        //Fetch ID of root node
+        let mfrSubNodeSiteResponseBody
+        try{
+          //Fetch layer detail
+          var subNode_detail = await fetch(mediatorConfig.config.baseurl + collection_req + '/' + 
+                                        collection_id + '.json?name=' + utils.returnCorrectName(hierarchy_sub[i].name) + '&reports_to=' + reports_to, {
+            method: "GET",
+            headers: {
+              "Authorization":"Basic " + encoded
+            }
+          })
+        } catch (err) {
+          mfrSubNodeSiteResponseBody = err.message
+          const headers = { 'content-type': 'application/text' }
+
+          // set content type header so that OpenHIM knows how to handle the response
+          res.set('Content-Type', 'application/json+openhim')
+
+          // construct return object
+          res.send(utils.buildReturnObject(mediatorConfig.urn, 'Failed', 404, headers, mfrSubNodeSiteResponseBody, 
+                    orchestrations, properties))
+          return
+        }
+
+        var mfrSubNodeDetail = await subNode_detail.json();
+        if(mfrSubNodeDetail.count > 0) {
+          var subNodeDescription = mfrSubNodeDetail.sites[0];
+          //Create the child node and insert it under the the sub root node
+          var subSubNode = tree.insertToNode(subNode, {
+            key: subNodeDescription.id,
+            value: {name: subNodeDescription.name}
+          })
+        }        
       }
     }
 
@@ -472,7 +551,7 @@ function setupApp () {
     let organisationUnits = []
     for(var n = 0; n < sites.sites.length; n++) {
       var node = tree.traverser().searchBFS(function(data){
-        return data.key === sites.sites[n].properties.Admin_health_hierarchy;
+        return data.key === sites.sites[n].properties.reports_to;
       });
 
       let parents = []
@@ -861,7 +940,7 @@ function setupApp () {
     //Fetch organisation unit information
     var ou_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req + 
                                   organisationUnitSearch_req_code + 
-                                  sites.sites[n].properties.Admin_health_hierarchy, {
+                                  sites.sites[n].properties.reports_to, {
       method: "GET",
       headers: {
         "Authorization":"Basic " + encodedDHIS2
@@ -878,7 +957,7 @@ function setupApp () {
     //Fetch organisation unit information
     var ou_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req + 
                                 organisationUnitSearch_req_code + 
-                                sites.sites[n].properties.ethiopian_national_identifier, {
+                                sites.sites[n].id, {
       method: "GET",
       headers: {
       "Authorization":"Basic " + encodedDHIS2
