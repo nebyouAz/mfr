@@ -8,7 +8,7 @@ exports.returnRootNodeName = function() {
 
 exports.doencode = function() {
   const encode = require('nodejs-base64-encode');
-  var username = "dhis2_test@mfr.org";
+  var username = "reader@mfr.org";
   var password = "123";
   var tobeencoded = username + ":" + password;
   return encode.encode(tobeencoded, 'base64');
@@ -22,14 +22,14 @@ exports.doencodeDHIS2 = function() {
   return encode.encode(tobeencoded, 'base64');
 }
 
-exports.returnCorrectName = function(name) {
+exports.returnCorrectName = function(nodeName) {
   let correctName;
-  if(name.endsWith('Addis Ababa Regional Health Bureau')) {
+  if(nodeName.endsWith('Addis Ababa Regional Health Bureau')) {
     correctName = "Addis Ababa City Administration Health Bureau"
-  } else if(name.endsWith('Dire Dawa Regional Health Bureau')) {
-    correctName = "Dire Dawa City Administation Health Bureau"
+  } else if(nodeName.endsWith('Dire Dawa Regional Health Bureau')) {
+    correctName = "Dire Dawa City Administration Health Bureau"
   } else {
-    correctName = name
+    correctName = nodeName
   }
   return correctName
 }
@@ -37,7 +37,7 @@ exports.returnCorrectName = function(name) {
 exports.returnShortName = function(name) {
   let shortName;
   if(name.endsWith('Federal Ministry of Health')) {
-    shortName = name.replace('Federal Ministry of Helath', 'FMOH')
+    shortName = name.replace('Federal Ministry of Health', 'FMOH')
   } else if(name.endsWith('Regional Health Bureau')) {
     shortName = name.replace('Regional Health Bureau', 'RHB')
   } else if(name.endsWith('Zonal Health Department')) {

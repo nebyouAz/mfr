@@ -2,6 +2,7 @@
 'use strict'
 
 const express = require('express')
+var request = require('Promise');
 const medUtils = require('openhim-mediator-utils')
 const winston = require('winston')
 const data_tree = require('data-tree')
@@ -109,7 +110,7 @@ function setupApp () {
    let collections_data
 
     try{
-      collections_data = await fetch(mediatorConfig.config.baseurl + collection_req, {
+      collections_data = await fetch(mediatorConfig.config.baseurl + collection_req + '.json', {
         method: "GET",
         headers: {
           "Authorization":"Basic " + encoded
@@ -242,7 +243,7 @@ function setupApp () {
     try{
       //Fetch layer detail
       var root_detail = await fetch(mediatorConfig.config.baseurl + collection_req + '/' + 
-                                    collection_id + '.json?name=' + utils.returnCorrectName(utils.returnRootNodeName), {
+                                    collection_id + '.json?name=' + utils.returnCorrectName(utils.returnRootNodeName()), {
         method: "GET",
         headers: {
           "Authorization":"Basic " + encoded
@@ -266,8 +267,10 @@ function setupApp () {
 
     var rootNode = tree.insert({
       key: mfrRoot.id,
-      value: {name: utils.returnCorrectName(utils.returnRootNodeName)}
+      value: {name: utils.returnCorrectName(utils.returnRootNodeName())}
     })
+
+    console.log("Root Node-----ID: " + mfrRoot.id + ", Name: " + utils.returnCorrectName(utils.returnRootNodeName()))
 
     //Work on the rest of the nodes under the root node
     let reports_to
@@ -278,7 +281,8 @@ function setupApp () {
       try{
         //Fetch layer detail
         var node_detail = await fetch(mediatorConfig.config.baseurl + collection_req + '/' + 
-                                      collection_id + '.json?name=' + utils.returnCorrectName(hierarchy[i].name) + '&reports_to=' + reports_to, {
+                                      collection_id + '.json?name=' + utils.returnCorrectName(hierarchy[i].name) + 
+                                      '&reports_to=' + reports_to, {
           method: "GET",
           headers: {
             "Authorization":"Basic " + encoded
@@ -300,12 +304,15 @@ function setupApp () {
       var mfrNodeDetail = await node_detail.json();
       var nodeDescription = mfrNodeDetail.sites[0];
 
+      console.log("nodeDescription: " + JSON.stringify(nodeDescription))
+      
+
       //Create the child node and insert it under the root node
       var subNode = tree.insertToNode(rootNode, {
         key: nodeDescription.id,
         value: {name: nodeDescription.name}
       })
-
+      console.log("\n#################Key: " + nodeDescription.id + ", Name: " + nodeDescription.name)
       reports_to = nodeDescription.id
       var hierarchy_sub = hierarchy[i].sub;     
       for(var j = 0; j < hierarchy_sub.length; j++) {
@@ -313,8 +320,11 @@ function setupApp () {
         let mfrSubNodeSiteResponseBody
         try{
           //Fetch layer detail
+          console.log("\n\n+++++++++++++++++++++++++++++++++++++++++++++\n" + mediatorConfig.config.baseurl + collection_req + '/' + 
+                      collection_id + '.json?name=' + utils.returnCorrectName(hierarchy_sub[j].name) + '&reports_to=' + reports_to)
           var subNode_detail = await fetch(mediatorConfig.config.baseurl + collection_req + '/' + 
-                                        collection_id + '.json?name=' + utils.returnCorrectName(hierarchy_sub[i].name) + '&reports_to=' + reports_to, {
+                                        collection_id + '.json?name=' + utils.returnCorrectName(hierarchy_sub[j].name) + 
+                                        '&reports_to=' + reports_to, {
             method: "GET",
             headers: {
               "Authorization":"Basic " + encoded
@@ -334,6 +344,8 @@ function setupApp () {
         }
 
         var mfrSubNodeDetail = await subNode_detail.json();
+        console.log("\n\n=========================================================\nmfrSubNodeDetail: " + 
+                    JSON.stringify(mfrSubNodeDetail))
         if(mfrSubNodeDetail.count > 0) {
           var subNodeDescription = mfrSubNodeDetail.sites[0];
           //Create the child node and insert it under the the sub root node
@@ -362,24 +374,41 @@ function setupApp () {
 
     let return_data
     //var i = 0;
+    const sleep = (milliseconds) => {
+      return new Promise(resolve => setTimeout(resolve, milliseconds))
+    }
     
-    tree.traverser().traverseBFS(async function(node){
+    var treeArray = []
+    tree.traverser().traverseBFS(function(node){
       var nodeToInsert = null
       var nodeKey = node.data().key
       var nodeName = node.data().value.name
       var parentKey = node.parentNode() == null ? '' : node.parentNode().data().key
       var parentName = node.parentNode() == null ? '' : node.parentNode().data().value.name
-  
-      if(parentKey == '') { //Root node
+      
+      var nodeArray = {
+        node_key: nodeKey,
+        node_name: nodeName,
+        parent_key: parentKey,
+        parent_name: parentName
+      }
+      
+      treeArray.push(nodeArray)
+    })
+    for(var m=0; m < treeArray.length; m++) {
+    //treeArray.forEach(async function(element) {
+      //console.log("****************In traverser********" + JSON.stringify(treeArray))
+      if(treeArray[m]['parent_key'] == '') { //Root node
         //Fetch organisation unit information
         try{
-          var ou_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req + 
-                            organisationUnitSearch_req_code + nodeKey, {
-            method: "GET",
-            headers: {
-              "Authorization":"Basic " + encodedDHIS2
-            }
+          var ou_detail =  await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req + 
+                          organisationUnitSearch_req_code + treeArray[m]['node_key'], {
+          method: "GET",
+          headers: {
+            "Authorization":"Basic " + encodedDHIS2
+          }
           })
+        
           .then(response => response.json())
           .then(function handleData(data) {
             return_data = data;
@@ -388,100 +417,108 @@ function setupApp () {
           console.log("In Root Node - Fetch Organisation unit info: " + err)
           return
         }
-        //console.log("*************" + return_data + "**************");
+        
+        //console.log("*************" + JSON.stringify(return_data) + "**************");
         if(return_data && return_data.organisationUnits.length == 0) { //node does not exist
+          console.log("XXXXXXXXXXXXXXXXXRoot node does NOT exist: " + treeArray[m]['node_key'])
           var nodeToInsert = {
               "name": "Federal Ministry of Health", 
               "openingDate": '1980-06-15',
               "shortName": utils.returnShortName('Federal Ministry of Health'),
-              "code": nodeKey
+              "code": treeArray[m]['node_key']
           }
         }
       } else {
         //Fetch organisation unit information
-        try{
+        
         var ou_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req +  
-                          organisationUnitSearch_req_code + nodeKey, {
+                        organisationUnitSearch_req_code + treeArray[m]['node_key'], {
           method: "GET",
           headers: {
-            "Authorization":"Basic " + encodedDHIS2
+          "Authorization":"Basic " + encodedDHIS2
           }
+        })
+        .catch((err) => { 
+          console.log("In branch Node - Fetch Organisation unit info: " + err)
+          return
         })
         .then(response => response.json())
         .then(function handleData(data) {
           return_data = data;
         })
-      } catch(err) {
-        console.log("In branch Node - Fetch Organisation unit info: " + err)
-        return
-      }
+        //console.log("*************" + JSON.stringify(return_data) + "**************");
         if(return_data && return_data.organisationUnits.length == 0) { //node does not exist
           //Fetch parent  organisation unit information
-         try{ 
+          console.log("XXXXXXXXXXXXXXXXXNode does NOT exist: " + treeArray[m]['node_key'] + " - Get the parent")
+          
           var ou_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req + 
-                organisationUnitSearch_req_code + parentKey, {
+                                organisationUnitSearch_req_code + treeArray[m]['parent_key'], {
             method: "GET",
             headers: {
               "Authorization":"Basic " + encodedDHIS2
               }
-            })
+          })
+          .catch((err) => {
+            console.log("In branch Node - Fetch Organisation unit parent info: " + err)
+            return
+          })
           .then(response => response.json())
           .then(function handleData(data) {
             return_data = data;
           })
-        } catch(err) {
-          console.log("In branch Node - Fetch Organisation unit parent info: " + err)
-          return
-        }
           
+          //console.log("*************" + JSON.stringify(return_data) + "**************");
            //console.log()
           if(return_data && return_data.organisationUnits.length > 0) {
             console.log("%%%%%%%" + mediatorConfig.config.DHIS2baseurl + organisationUnit_req + 
-                        organisationUnitSearch_req_code + parentKey + "%%%%%%%")
+                        organisationUnitSearch_req_code + treeArray[m]['parent_key'] + "%%%%%%%")
             console.log("%%%%%%%%" + JSON.stringify(return_data) + "%%%%%%%%")
-          var nodeToInsert = {
-            "name": nodeName, 
-            "openingDate": '1980-06-15',
-            "shortName": utils.returnShortName(nodeName),
-            "code": nodeKey,
-            "parent":{
-              "id": return_data.organisationUnits[0].id
+            var nodeToInsert = {
+              "name": treeArray[m]['node_name'],
+              "openingDate": '1980-06-15',
+              "shortName": utils.returnShortName(treeArray[m]['node_name']),
+              "code": treeArray[m]['node_key'],
+              "parent":{
+                "id": return_data.organisationUnits[0].id
+              }
             }
-          }
           }
         }
       }
 
+      console.log("!!!!!!!!!!!!!!!!!!!!!!Node to insert" + (nodeToInsert == null ? "Already available!" : nodeToInsert))
+
       if(nodeToInsert != null){
       //Add new parent Organisation Unit
-      try{
-      var insert_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req, {
-        method: "POST",
-        headers: {
-          "Authorization":"Basic " + encodedDHIS2,
-          "Content-Type":"application/json"
-        },
-        body: JSON.stringify(nodeToInsert)
-        
-      })
-      .then(response => response.json())
-      .then(function handleData(data) {
-        return_data = data;
-      })
-    } catch(err) {
-      console.log("Register Organisation unit info: " + err)
-      return
-    }
-  }
       
-  })
+        var insert_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req, {
+          method: "POST",
+          headers: {
+            "Authorization":"Basic " + encodedDHIS2,
+            "Content-Type":"application/json"
+          },
+          body: JSON.stringify(nodeToInsert)
+        
+        })
+        .catch((err) => {
+          console.log("Register Organisation unit info: " + err)
+          return
+        })
+        .then(response => response.json())
+        .then(function handleData(data) {
+          return_data = data;
+        })
+        console.log("*************" + JSON.stringify(return_data) + "**************");
+      }
+      
+  }
   
   var responseBody = JSON.stringify(return_data)
     
   // capture orchestration data
   var orchestrationResponse = { statusCode: 200, headers: headers }
   //let orchestrations = []
-  orchestrations.push(utils.buildOrchestration('Hierarchy Sync DIS2', new Date().getTime(), req.method, 
+  orchestrations.push(utils.buildOrchestration('Hierarchy Sync DHIS2', new Date().getTime(), req.method, 
                       req.url, req.headers, req.body, orchestrationResponse, responseBody))
 
    
@@ -520,6 +557,7 @@ function setupApp () {
 
     var sites = await site_detail.json();
     
+    console.log("^^^^^^^^^Site Detail: ^^^^^^^^^^" + JSON.stringify(sites))
     if (typeof sites.error !== 'undefined') {
       mfrSiteDetailResponseBody = sites.error;
       const headers = { 'content-type': 'application/text' }

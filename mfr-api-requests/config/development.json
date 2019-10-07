@@ -17,7 +17,7 @@
   "api": {
     "apiURL": "https://localhost:8080",
     "username": "root@openhim.org",
-    "password": "openhimPass"
+    "password": "JissonofG"
   },
   "statsd": {
     "host": "localhost",

@@ -63,8 +63,8 @@
 
     ],
     "config": {
-      "baseurl": "https://api.mfr.sandboxaddis.com",
-      "collectionname": "Ethiopia Health Facility Registry",
+      "baseurl": "http://api.mfr.sandboxaddis.com",
+      "collectionname": "MFR-PRODUCTION",
       "DHIS2baseurl": "http://localhost:8081"
     }
   }
