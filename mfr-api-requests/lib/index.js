@@ -313,9 +313,11 @@ function setupApp () {
         value: {name: nodeDescription.name}
       })
       console.log("\n#################Key: " + nodeDescription.id + ", Name: " + nodeDescription.name)
-      reports_to = nodeDescription.id
+      
       var hierarchy_sub = hierarchy[i].sub;     
       for(var j = 0; j < hierarchy_sub.length; j++) {
+
+        reports_to = nodeDescription.id
         //Fetch ID of root node
         let mfrSubNodeSiteResponseBody
         try{
@@ -353,7 +355,55 @@ function setupApp () {
             key: subNodeDescription.id,
             value: {name: subNodeDescription.name}
           })
-        }        
+          console.log("\n#################Key: " + subNodeDescription.id + ", Name: " + subNodeDescription.name)
+        }
+        reports_to = subNodeDescription.id
+        var hierarchysub_sub = hierarchy_sub[j].sub;     
+        if(hierarchysub_sub && hierarchysub_sub != null) {
+          for(var k = 0; k < hierarchysub_sub.length; k++) {
+            //Fetch ID of root node
+            let mfrSubSubNodeSiteResponseBody
+            try{
+              //Fetch layer detail
+              console.log("\n\n+++++++++++++++++++++++++++++++++++++++++++++\n" + mediatorConfig.config.baseurl + 
+                          collection_req + '/' + collection_id + '.json?name=' + utils.returnCorrectName(hierarchysub_sub[k].name) + 
+                          '&reports_to=' + reports_to)
+              var subSubNode_detail = await fetch(mediatorConfig.config.baseurl + collection_req + '/' + 
+                                            collection_id + '.json?name=' + utils.returnCorrectName(hierarchysub_sub[k].name) + 
+                                            '&reports_to=' + reports_to, {
+                method: "GET",
+                headers: {
+                  "Authorization":"Basic " + encoded
+                }
+              })
+            } catch (err) {
+              mfrSubSubNodeSiteResponseBody = err.message
+              const headers = { 'content-type': 'application/text' }
+
+              // set content type header so that OpenHIM knows how to handle the response
+              res.set('Content-Type', 'application/json+openhim')
+
+              // construct return object
+              res.send(utils.buildReturnObject(mediatorConfig.urn, 'Failed', 404, headers, mfrSubSubNodeSiteResponseBody, 
+                        orchestrations, properties))
+              return
+            }
+
+            var mfrSubSubNodeDetail = await subSubNode_detail.json();
+            console.log("\n\n=========================================================\mfrSubSubNodeDetail: " + 
+                        JSON.stringify(mfrSubSubNodeDetail))
+            if(mfrSubSubNodeDetail.count > 0) {
+              var subSubNodeDescription = mfrSubSubNodeDetail.sites[0];
+              //Create the child node and insert it under the the sub root node
+              var subSubSubNode = tree.insertToNode(subSubNode, {
+                key: subSubNodeDescription.id,
+                value: {name: subSubNodeDescription.name}
+              })
+              console.log("\n#################Key: " + subSubNodeDescription.id + ", Name: " + subSubNodeDescription.name)
+            }
+          }
+        }
+        
       }
     }
 
@@ -526,7 +576,7 @@ function setupApp () {
       FETCH SITE DETAIL INFORMATION
       Connects to MFR API for site detail
   *******************************************/
-  
+ 
    let mfrSiteDetailResponseBody
    var fetchURL = mediatorConfig.config.baseurl + collection_req + '/' + 
                   collection_id + '.json' + '?created_since=' + lastAdded + '&page=1'
@@ -587,12 +637,133 @@ function setupApp () {
     ******************************************/
     
     let organisationUnits = []
-    for(var n = 0; n < sites.sites.length; n++) {
-      var node = tree.traverser().searchBFS(function(data){
+    var site_array = sites.sites
+    
+    for(var n = 0; n < site_array.length; n++) {
+      var facilities_to_add = []
+      var facility = site_array[n]
+
+      console.log(JSON.stringify(facility))
+
+      var parent_id = ""
+      while(typeof facility.id !== 'undefined') {
+        //Fetch organisation unit information
+        var ou_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req + 
+                                  organisationUnitSearch_req_code + facility.id, {
+          method: "GET",
+          headers: {
+            "Authorization":"Basic " + encodedDHIS2
+          }
+        })
+        .then(response => response.json())
+        .then(function handleData(data) {
+          return_data = data;
+        })
+        if(return_data.organisationUnits.length == 0) { //Not found in DHIS2
+          facilities_to_add.push(
+            {
+              "name": facility.name,
+              "openingDate": facility.properties.year_opened ? facility.properties.year_opened : 
+                              '1980-06-15',
+              "shortName": utils.returnShortName(facility.name),
+              "code": facility.id
+            }
+          )
+
+          let mfrResponseBody
+        
+          console.log("^^^^^^^^^^^" + mediatorConfig.config.baseurl + site_req + '/' + 
+                            facility.properties.reports_to + '.json' + "^^^^^^^^^^")
+          try{
+            //Fetch site detail
+            var parent_site_detail = await fetch(mediatorConfig.config.baseurl + site_req + '/' + 
+                                              facility.properties.reports_to + '.json', {
+              method: "GET",
+              headers: {
+                "Authorization":"Basic " + encoded
+              }
+            });
+          } catch (err) {
+            mfrResponseBody = err.message
+            const headers = { 'content-type': 'application/text' }
+
+            // set content type header so that OpenHIM knows how to handle the response
+            res.set('Content-Type', 'application/json+openhim')
+
+            // construct return object
+            res.send(utils.buildReturnObject(mediatorConfig.urn, 'Failed', 404, headers, mfrResponseBody, 
+                      orchestrations, properties))
+            return
+          }
+
+          var parent_site = await parent_site_detail.json();
+          facility = parent_site
+        } else {
+          facility = ""
+          if(facilities_to_add.length > 0) {
+            parent_id = return_data.organisationUnits[0].id
+          }
+        }
+      }
+      
+      for(var i = facilities_to_add.length - 1; i >= 0; i--) { //Register the organisation units on DHIS2
+        //Add new Organisation Unit
+        var organisationUnit_to_add = {
+          "name": facilities_to_add[i].name,
+          "openingDate": facilities_to_add[i].openingDate,
+          "shortName": facilities_to_add[i].shortName,
+          "code": facilities_to_add[i].code,
+          "parent":{
+            "id": parent_id
+          }
+        }
+        var insert_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req, {
+          method: "POST",
+          headers: {
+            "Authorization":"Basic " + encodedDHIS2,
+            "Content-Type":"application/json"
+          },
+          body: JSON.stringify(organisationUnit_to_add)
+          
+        })
+        .then(response => response.json())
+        .then(function handleData(data) {
+          return_data = data;
+        })
+        //console.log(return_data.response.errorReports)
+        //responseBody = JSON.stringify(return_data);
+        if(return_data.response.uid) {
+          parent_id = return_data.response.uid
+        }
+      }
+    }
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      /*var node = tree.traverser().searchBFS(function(data){
         return data.key === sites.sites[n].properties.reports_to;
       });
 
+      //Use http://api.mfr.sandboxaddis.com/api/sites/91563.json to 
+      //mediatorConfig.config.baseurl + site_req + '/' + id + '.json'
+
       let parents = []
+
       while(node) {
         parents.push ({
           "name": node._data.value.name,
@@ -888,10 +1059,13 @@ function setupApp () {
     orchestrations.push(utils.buildOrchestration('Register in DHIS2', new Date().getTime(), req.method, req.url, 
                         req.headers, req.body, orchestrationResponse, responseBody))
     
+
+*/
     //Manage page
     fetchURL = sites.nextPage
   } //While loop based on nextPage ends here  
   
+  /*
   //Update the last_added date/time
   try {
     let now = new Date();
@@ -908,6 +1082,8 @@ function setupApp () {
                 orchestrations, properties))
     return
   }
+
+  */
 ///////////////////////////////////////////////UPDATE////////////////////////////////////////
 
 /******************************************
@@ -915,7 +1091,7 @@ function setupApp () {
       Connects to MFR API for site detail
   *******************************************/
  
- mfrSiteDetailResponseBody
+ /*mfrSiteDetailResponseBody
  fetchURL = mediatorConfig.config.baseurl + collection_req + '/' + 
                 collection_id + '.json' + '?updated_since=' + lastUpdated + '&page=1'
  
@@ -966,12 +1142,13 @@ function setupApp () {
                 req.url, req.headers, req.body, orchestrationResponse, responseBody))
     
 
+*/
   /*****************************************
     SYNC UPDATED FACILITITES
     Connects to MFR API for facilities and
     updates them to DHIS2
   ******************************************/
-  
+  /*
   let organisationUnits = []
   for(var n = 0; n < sites.sites.length; n++) {
     
@@ -1076,7 +1253,7 @@ try {
               orchestrations, properties))
   return
 }
-
+*/
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 // set content type header so that OpenHIM knows how to handle the response
