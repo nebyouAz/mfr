@@ -717,6 +717,7 @@ function setupApp () {
             "id": parent_id
           }
         }
+        try{
         var insert_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req, {
           method: "POST",
           headers: {
@@ -730,6 +731,10 @@ function setupApp () {
         .then(function handleData(data) {
           return_data = data;
         })
+        } catch(err) {
+                console.log("Register Organisation unit info: " + err)
+                return
+              }
         //console.log(return_data.response.errorReports)
         //responseBody = JSON.stringify(return_data);
         if(return_data.response.uid) {
