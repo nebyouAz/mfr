@@ -717,24 +717,19 @@ function setupApp () {
             "id": parent_id
           }
         }
-        try{
-          var insert_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req, {
-            method: "POST",
-            headers: {
-              "Authorization":"Basic " + encodedDHIS2,
-              "Content-Type":"application/json"
-            },
-            body: JSON.stringify(organisationUnit_to_add)
-            
-          })
-          .then(response => response.json())
-          .then(function handleData(data) {
-            return_data = data;
-          })
-        } catch(err) {
-          console.log("Register Organisation unit info: " + err)
-          return
-        }
+        var insert_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req, {
+          method: "POST",
+          headers: {
+            "Authorization":"Basic " + encodedDHIS2,
+            "Content-Type":"application/json"
+          },
+          body: JSON.stringify(organisationUnit_to_add)
+          
+        })
+        .then(response => response.json())
+        .then(function handleData(data) {
+          return_data = data;
+        })
         //console.log(return_data.response.errorReports)
         //responseBody = JSON.stringify(return_data);
         if(return_data.response.uid) {
