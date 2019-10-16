@@ -737,8 +737,12 @@ function setupApp () {
         }
         //console.log(return_data.response.errorReports)
         //responseBody = JSON.stringify(return_data);
-        if(return_data.response.uid) {
-          parent_id = return_data.response.uid
+        if(return_data.status == "OK") {
+          if(return_data.response.uid) {
+            parent_id = return_data.response.uid
+          }
+        } else {
+          console.log("\n---------Could NOT register into DHIS2------------------\n");
         }
       }
     }
