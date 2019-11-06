@@ -24,6 +24,7 @@
     "nodejs-base64-encode": "0.0.2",
     "on-finished": "^2.2.0",
     "openhim-mediator-utils": "^0.2.3",
+    "rss-parser": "^3.7.3",
     "server-graceful-shutdown": "^0.1.2",
     "type-is": "^1.5.5",
     "winston": "^1.1.2"

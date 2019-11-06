@@ -10,6 +10,7 @@ const utils = require('./utils')
 const fs = require('fs')
 const fetch = require('node-fetch');
 const date = require('date-and-time');
+const Parser = require('rss-parser')
 
 // Logging setup
 winston.remove(winston.transports.Console)
@@ -44,6 +45,8 @@ function setupApp () {
     var last_added = '/last_added'
     var last_updated = '/last_updated'
     var headers = { 'content-type': 'application/json' }
+    var activity_req = '/api/activity.rss';
+    var dhis2_msg= '/api/messageConversations';
 
     var encoded = utils.doencode()
     var encodedDHIS2 = utils.doencodeDHIS2()
@@ -171,7 +174,7 @@ function setupApp () {
          FETCH LAYER INFORMATION
          Connects to MFR API for layers
     ***************************************/
-
+/*
     let mfrLayersResponseBody
     try{
       //Fetch layer detail
@@ -222,7 +225,7 @@ function setupApp () {
     BUILD TREE FOR THE LAYER HIERARCHY
     use data-tree npm
   ******************************************/
-    
+  /*
     let hierarchy
     for(var layer_element of layer) {
       if(layer_element.name == 'General Information of the Facility') {
@@ -421,7 +424,7 @@ function setupApp () {
       use data-tree npm and the already 
       constructed tree structure
     ******************************************/
-
+/*
     let return_data
     //var i = 0;
     const sleep = (milliseconds) => {
@@ -571,12 +574,12 @@ function setupApp () {
   orchestrations.push(utils.buildOrchestration('Hierarchy Sync DHIS2', new Date().getTime(), req.method, 
                       req.url, req.headers, req.body, orchestrationResponse, responseBody))
 
-   
+*/
   /******************************************
       FETCH SITE DETAIL INFORMATION
       Connects to MFR API for site detail
   *******************************************/
- 
+   let return_data
    let mfrSiteDetailResponseBody
    var fetchURL = mediatorConfig.config.baseurl + collection_req + '/' + 
                   collection_id + '.json' + '?created_since=' + lastAdded + '&page=1'
@@ -661,25 +664,37 @@ function setupApp () {
         })
         if(return_data.organisationUnits.length == 0) { //Not found in DHIS2
           //Check for phcu case
-          if((typeof facility.properties.isPhcu !== 'undefined') && facility.properties.isPhcu) {
-            if((typeof facility.properties.phcuParentId !== 'undefined') && facility.properties.phcuParentId != "") {
+          if((typeof facility.properties.isphcu !== 'undefined') && facility.properties.isphcu) {
+            if((typeof facility.properties.phcuparentid !== 'undefined')) {
+              var opening_date
+              if(typeof facility.properties.year_opened !== 'undefined') {
+                var date_arr = facility.properties.year_opened.split("/");
+                opening_date = date_arr[2] + '-' + date_arr[1] + '-' + date_arr[0]
+              } else {
+                opening_date = '1980-06-15'
+              }                                  
               facilities_to_add.push(
                 {
                   "name": facility.name,
-                  "openingDate": facility.properties.year_opened ? facility.properties.year_opened : 
-                                  '1980-06-15',
+                  "openingDate": opening_date,
                   "shortName": utils.returnShortName(facility.name),
                   "code": facility.id,
                   "phcuStatus": "child",
-                  "phcuParentId": facility.properties.phcuParentId
+                  "phcuParentId": facility.properties.phcuparentid
                 }
               )
             } else {
+              var opening_date
+              if(typeof facility.properties.year_opened !== 'undefined') {
+                var date_arr = facility.properties.year_opened.split("/");
+                opening_date = date_arr[2] + '-' + date_arr[1] + '-' + date_arr[0]
+              } else {
+                opening_date = '1980-06-15'
+              }
               facilities_to_add.push(
                 {
                   "name": facility.name,
-                  "openingDate": facility.properties.year_opened ? facility.properties.year_opened : 
-                                  '1980-06-15',
+                  "openingDate": opening_date,
                   "shortName": utils.returnShortName(facility.name),
                   "code": facility.id,
                   "phcuStatus": "parent"
@@ -687,17 +702,24 @@ function setupApp () {
               )
             }
           } else {
+            var opening_date
+            if(typeof facility.properties.year_opened !== 'undefined') {
+              var date_arr = facility.properties.year_opened.split("/");
+              opening_date = date_arr[2] + '-' + date_arr[1] + '-' + date_arr[0]
+            } else {
+              opening_date = '1980-06-15'
+            }
             facilities_to_add.push(
               {
                 "name": facility.name,
-                "openingDate": facility.properties.year_opened ? facility.properties.year_opened : 
-                                '1980-06-15',
+                "openingDate": opening_date,
                 "shortName": utils.returnShortName(facility.name),
                 "code": facility.id
               }
             )
           }
-
+          console.log("\n!!!!!!!!!!!Facilities To Add: !!!!!!!!!!!!!!!!!" + 
+                JSON.stringify(facilities_to_add))
           let mfrResponseBody
         
           console.log("^^^^^^^^^^^" + mediatorConfig.config.baseurl + site_req + '/' + 
@@ -786,12 +808,13 @@ function setupApp () {
               if(return_data.status == "OK") {
                 if(return_data.response.uid) {
                   parent_id = return_data.response.uid
+                  console.log("In IF{{{{{{{{{{FROM PHCU: uid: }}}}}}}}} " + parent_id)
                 }
               } else {
                 console.log("\n---------FROM PHCU: Could NOT register into DHIS2------------------\n");
               }  
             } else {
-              parent_id = return_data.organisationUnits.id
+              parent_id = return_data.organisationUnits[0].id
             }
           } else { //If it is a child under a phcu
             //Check to see if the PHCU already exists or not
@@ -839,12 +862,13 @@ function setupApp () {
               if(return_data.status == "OK") {
                 if(return_data.response.uid) {
                   parent_id = return_data.response.uid
+                  console.log("In response uid{{{{{{{{{{FROM PHCU: uid: }}}}}}}}} " + parent_id)
                 }
               } else {
                 console.log("\n---------FROM PHCU: Could NOT register into DHIS2------------------\n");
               }  
             } else {
-              parent_id = return_data.organisationUnits.id
+              parent_id = return_data.organisationUnits[0].id
             }
 
           }
@@ -861,6 +885,8 @@ function setupApp () {
             "id": parent_id
           }
         }
+
+        console.log("...................." + JSON.stringify(organisationUnit_to_add) + ".....................")
         try{
           insert_detail = await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req, {
             method: "POST",
@@ -1007,6 +1033,9 @@ function setupApp () {
       })
 
     //if(return_data.organisationUnits.length > 0) {
+      console.log("\n\nThe request on line# 1036: " + mediatorConfig.config.DHIS2baseurl + organisationUnit_req + 
+                  organisationUnitSearch_req_code + sites.sites[n].properties.reports_to);
+      console.log("\nThe response: " + JSON.stringify(return_data))
     var parent_id = return_data.organisationUnits[0].id
     
     //Fetch organisation unit information
@@ -1025,11 +1054,17 @@ function setupApp () {
 
       var org_unit_id = return_data.organisationUnits[0].id
 
+      var opening_date
+      if(typeof sites.sites[n].properties.year_opened !== 'undefined') {
+        var date_arr = sites.sites[n].properties.year_opened.split("/");
+        opening_date = date_arr[2] + '-' + date_arr[1] + '-' + date_arr[0]
+      } else {
+        opening_date = '1980-06-15'
+      }
       var organisationUnit = {
         "id": org_unit_id,
         "name": sites.sites[n].name, 
-        "openingDate": sites.sites[n].properties.year_opened ? sites.sites[n].properties.year_opened : 
-                        '1980-06-15',
+        "openingDate": opening_date,
         "shortName": sites.sites[n].properties.short_name ? sites.sites[n].properties.short_name : 
                       utils.returnShortName(sites.sites[n].name), 
         "latitude": sites.sites[n].lat,
@@ -1103,6 +1138,106 @@ res.set('Content-Type', 'application/json+openhim')
 var properties = { property: 'Primary Route' }
 res.send(utils.buildReturnObject(mediatorConfig.urn, 'Successful', 200, headers, responseBody, 
                                   orchestrations, properties))
+
+
+
+/**
+ *  Send message to DHIS2 Admin
+ *
+ */
+
+let parser = new Parser({
+  headers: {
+      "Authorization":"Basic " + encoded
+    },
+  customFields: {
+      item: [
+          ['rm:collection','collection'],
+          ['rm:itemtype','itemtype'],
+          ['rm:itemid','itemid'],
+          ['rm:action','action'],
+      ]
+  }
+});
+
+let rssfeeds= [];
+
+
+//version 0.2 compare lastUpdate and pubDate
+await parser.parseURL(mediatorConfig.config.baseurl + activity_req)
+    .then(feed =>{ feed.items.forEach(item => rssfeeds.push(item));} )
+
+console.log('~~~~~~~~~~~~~~~~~ ' + rssfeeds.length);
+
+//let return_data;
+
+for(var m=0; m < rssfeeds.length; m++) {
+
+  var pubDate= date.format(new Date(rssfeeds[m].pubDate), 'YYYY-MM-DD HH:mm:ssZ');
+  console.log('lastUpdated: ' + lastUpdated +  'pubDate '+ pubDate);
+
+  if(pubDate >= lastUpdated){
+
+    await fetch(mediatorConfig.config.DHIS2baseurl + organisationUnit_req + 
+      organisationUnitSearch_req_code + rssfeeds[m].itemid, {
+      method: "GET",
+      headers: {
+      "Authorization":"Basic " + encodedDHIS2
+      }
+      })
+      .then(response => response.json())
+      .then(function handleData(data) {
+      return_data = data;
+      })
+
+      console.log('!!!!!!!!!!!!!!!!!!!!!!  ' + return_data.organisationUnits.length )
+      if(return_data.organisationUnits.length != 0){  //if it is in DHIS2
+    
+        var name = return_data.organisationUnits[0].displayName
+        var emailSubject;
+        if(rssfeeds[m].action === 'changed')
+            emailSubject= 'Facility Information Updated'
+        else if (rssfeeds[m].action === 'created')
+            emailSubject= 'New Facility Information Added'
+        else
+            emailSubject= 'INFO'
+        var message= {
+            "subject" : emailSubject + ' : ' + name,
+            "text" : rssfeeds[m].title + ' on ' + rssfeeds[m].pubDate ,
+            "users" : [
+                {
+                    "id": "M5zQapPyTZI"
+                }
+            ]
+        }
+        
+        console.log(JSON.stringify(message));
+
+        if(message != null){
+            
+            var send_msg = await fetch(mediatorConfig.config.DHIS2baseurl + dhis2_msg, {
+                method: "POST",
+                headers: {
+                "Authorization":"Basic " + encodedDHIS2,
+                "Content-Type":"application/json"
+                },
+                body: JSON.stringify(message)
+            
+            })
+            .catch((err) => {
+                console.log("Message send to DHIS2 Admin failed: " + err)
+                return
+            })
+            console.log('Message sent successfuly')
+        } 
+      }
+    }
+
+  }
+
+
+
+
 })
 return app
 }
